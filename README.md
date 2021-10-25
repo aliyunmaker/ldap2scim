@@ -1,12 +1,13 @@
 # 配置文件
 
-```shell
-key_aliyun_cloudsso = 8aAJCtpbyPJ**********************************************
+```properties
+key_aliyun_cloudsso = cloud_sso_key
 ldap_url = ldap://127.0.0.1:389
 ldap_username = username
 ldap_password = password
 ldap_searchbase = ou=hangzhou,dc=landingzone,dc=cc
 
+# 这里是ldap字段和scim字段的对应关系
 ldap_attr_firstname = givenName
 ldap_attr_lastname = sn
 ldap_attr_email = userPrincipalName
@@ -19,6 +20,12 @@ ldap_attr_username = userPrincipalName
 
 - dreamweb.jar同目录下的dreamweb.properties
 - home目录下的dreamweb.properties
+
+#### key_aliyun_cloudsso
+
+![screenshot1](image/cloudsso_key.png)
+
+
 
 # 启动类(springboot)
 `cc.landingzone.dreamweb.DreamwebApplication`
