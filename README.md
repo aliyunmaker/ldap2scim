@@ -28,3 +28,9 @@ ldap_attr_username = userPrincipalName
 # 打包
 
 `mvn clean package -Dmaven.test.skip=true`
+
+
+
+# 截屏
+
+![screenshot1](screenshot1.png)
