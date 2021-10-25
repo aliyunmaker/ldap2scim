@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>无限梦想</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css"	href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/extjs/4.1/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css"	href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/css/common.css" />
+    <link rel="stylesheet" type="text/css"  href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/css/font-awesome/css/font-awesome.min.css" />
+    <script type="text/javascript" src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/extjs/4.1/ext-all.js"></script>
+    <script type="text/javascript" src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/jslib/utilsv4.js"></script>
+    <script type="text/javascript" src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/jslib/myComponent.js"></script>
+    <script th:inline="javascript">
+        Ext
+            .onReady(function () {
+                Ext.tip.QuickTipManager.init();
+
+                var store = Ext.create('Ext.data.TreeStore', {
+                    root: {
+                        expanded: true,
+                        children: [
+                            {
+                                text: "<font style='font-weight: bold;'>功能列表</font>",
+                                iconCls: 'MyExt-menu-sub',
+                                expanded: true,
+                                children: [
+                                    {
+                                        text: "SCIM同步",
+                                        leaf: true,
+                                        href: 'scim/scimUser.html',
+                                        hrefTarget: 'mainFrame'
+                                    },
+                                    {
+                                        text: "LDAP同步",
+                                        leaf: true,
+                                        href: 'ldap/ldap.html',
+                                        hrefTarget: 'mainFrame'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                });
+
+                var tree_panel = Ext.create('Ext.tree.Panel', {
+                    frame: false,
+                    border: false,
+                    region: "center",
+                    store: store,
+                    rootVisible: false
+                });
+
+                var header_panel = Ext
+                    .create(
+                        'Ext.panel.Panel',
+                        {
+                            region: "north",
+                            height: 68,
+                            frame: false,
+                            border: false,
+                            bodyStyle: 'background:rgb(223,233,246)',
+                            html: 'loading...'
+                        });
+
+                var main_panel = Ext.create('Ext.panel.Panel', {
+                    // title : 'Hello',
+                    frame: false,
+                    border: false,
+                    region: "center",
+                    html: '<iframe name="mainFrame" frameborder="0" width="100%" height="100%" src="welcome/welcome.html"/>'
+                });
+
+                Ext.create('Ext.container.Viewport', {
+                    layout: 'border',
+                    items: [{
+                        layout: 'border',
+                        region: 'west',
+                        // frame : false,
+                        // border : false,
+                        split: true,
+                        width: 160,
+                        margins: '0 0 0 0',
+                        items: [header_panel, tree_panel]
+                    }, main_panel]
+                });
+
+                MyExt.util.Ajax("system/getIndexLogoPage.do", null, function (data) {
+                    header_panel.body.update(data.data);
+                });
+
+            });
+    </script>
+</head>
+<body>
+<div align="left"></div>
+</body>
+</html>
