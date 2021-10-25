@@ -1,6 +1,4 @@
-# 环境准备
-
-### 配置文件
+# 配置文件
 
 ```shell
 key_aliyun_cloudsso = 8aAJCtpbyPJ**********************************************
@@ -17,11 +15,16 @@ ldap_attr_displayname = userPrincipalName
 ldap_attr_username = userPrincipalName
 ```
 
-读取顺序
+#### 读取顺序
 
 - dreamweb.jar同目录下的dreamweb.properties
 - home目录下的dreamweb.properties
 
-### 启动类(springboot)
-cc.landingzone.dreamweb.DreamwebApplication
+# 启动类(springboot)
+`cc.landingzone.dreamweb.DreamwebApplication`
 
+
+
+# 打包
+
+`mvn clean package -Dmaven.test.skip=true`
