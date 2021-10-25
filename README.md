@@ -33,4 +33,4 @@ ldap_attr_username = userPrincipalName
 
 # 截屏
 
-![screenshot1](screenshot1.png)
+![screenshot1](image/screenshot1.png)
