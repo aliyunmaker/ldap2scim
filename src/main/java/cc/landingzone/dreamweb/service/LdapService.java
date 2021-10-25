@@ -45,7 +45,7 @@ public class LdapService {
         // env.put(Context.REFERRAL, "follow");
         try {
             InitialDirContext dc = new InitialDirContext(env);// 初始化上下文
-            System.out.println("认证成功");
+            logger.info("auth success");
             // 创建搜索控件
             SearchControls searchCtls = new SearchControls();
             // 设置搜索范围
