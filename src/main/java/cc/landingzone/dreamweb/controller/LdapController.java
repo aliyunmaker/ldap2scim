@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +38,10 @@ public class LdapController extends BaseController {
     public void searchLdapUser(HttpServletRequest request, HttpServletResponse response) {
         WebResult result = new WebResult();
         try {
-            String simpleSearch = request.getParameter("simpleSearch");
-            if (StringUtils.isBlank(simpleSearch)) {
-                simpleSearch = null;
-            }
+            String ldapbase = request.getParameter("ldapbase");
+            String ldapfilter = request.getParameter("ldapfilter");
             List<ScimUser> cloudssoUserList = ScimUserService.searchScimUser(null);
-            List<ScimUser> list = ldapService.searchLdapUser();
+            List<ScimUser> list = ldapService.searchLdapUser(ldapbase, ldapfilter);
             // 塞入scim user id;
             for (ScimUser scimUser : list) {
                 for (ScimUser cloudssoUser : cloudssoUserList) {
@@ -67,7 +64,8 @@ public class LdapController extends BaseController {
     public void syncUser(HttpServletRequest request, HttpServletResponse response) {
         WebResult result = new WebResult();
         try {
-
+            String ldapbase = request.getParameter("ldapbase");
+            String ldapfilter = request.getParameter("ldapfilter");
             // cloudsso
             List<ScimUser> cloudssoUserList = ScimUserService.searchScimUser(null);
             Map<String, ScimUser> cloudssoMap = new HashMap<>();
@@ -75,7 +73,7 @@ public class LdapController extends BaseController {
                 cloudssoMap.put(scimUser.getEmail(), scimUser);
             }
 
-            List<ScimUser> list = ldapService.searchLdapUser();
+            List<ScimUser> list = ldapService.searchLdapUser(ldapbase, ldapfilter);
             String emails = request.getParameter("emails");
             List<String> emailList = JsonUtils.parseArray(emails, String.class);
             for (ScimUser scimUser : list) {

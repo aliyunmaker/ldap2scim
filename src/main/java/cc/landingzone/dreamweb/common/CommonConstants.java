@@ -17,6 +17,7 @@ public class CommonConstants {
     public static final String LDAP_UserName;
     public static final String LDAP_Password;
     public static final String LDAP_Searchbase;
+    public static final String LDAP_Searchfilter;
 
     public static final String LDAP_ATTR_FIRSTNAME;
     public static final String LDAP_ATTR_LASTNAME;
@@ -34,6 +35,7 @@ public class CommonConstants {
         LDAP_UserName = properties.getProperty("ldap_username");
         LDAP_Password = properties.getProperty("ldap_password");
         LDAP_Searchbase = properties.getProperty("ldap_searchbase");
+        LDAP_Searchfilter = properties.getProperty("ldap_searchfilter");
         LDAP_ATTR_FIRSTNAME = properties.getProperty("ldap_attr_firstname");
         LDAP_ATTR_LASTNAME = properties.getProperty("ldap_attr_lastname");
         LDAP_ATTR_EMAIL = properties.getProperty("ldap_attr_email");
@@ -46,6 +48,7 @@ public class CommonConstants {
         logger.info("LDAP_UserName:" + LDAP_UserName);
         logger.info("LDAP_Password:" + LDAP_Password);
         logger.info("LDAP_Searchbase:" + LDAP_Searchbase);
+        logger.info("LDAP_Searchfilter:" + LDAP_Searchfilter);
         logger.info("-----------------------------------------------------------");
         logger.info("LDAP_ATTR_FIRSTNAME:" + LDAP_ATTR_FIRSTNAME);
         logger.info("LDAP_ATTR_LASTNAME:" + LDAP_ATTR_LASTNAME);

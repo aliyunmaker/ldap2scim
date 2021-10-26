@@ -19,10 +19,10 @@ Ext.onReady(function () {
   var searchForm = Ext.create('Ext.form.Panel', {
     region: 'north',
     frame: true,
-    height: 80,
+    height: 100,
     bodyStyle: 'padding:15px 0px 0px 10px',
     fieldDefaults: {
-      labelWidth: 30
+      labelWidth: 80
     },
     defaults: {
       width: 300
@@ -30,10 +30,23 @@ Ext.onReady(function () {
     defaultType: 'textfield',
     buttonAlign: 'left',
     items: [{
-      fieldLabel: '搜索',
+      fieldLabel: 'LDAP filter',
       width: 600,
-      emptyText: 'search',
-      name: 'simpleSearch',
+      emptyText: '(objectClass=user)',
+      name: 'ldapfilter',
+      enableKeyEvents: true,
+      listeners: {
+        keypress: function (thiz, e) {
+          if (e.getKey() == Ext.EventObject.ENTER) {
+            userGrid.getPageToolbar().moveFirst();
+          }
+        }
+      }
+    }, {
+      fieldLabel: 'LDAP base',
+      width: 600,
+      emptyText: 'ou=hangzhou,dc=test,dc=com',
+      name: 'ldapbase',
       enableKeyEvents: true,
       listeners: {
         keypress: function (thiz, e) {
@@ -87,7 +100,9 @@ Ext.onReady(function () {
         }
         MyExt.util.MessageConfirm('是否确定同步', function () {
           MyExt.util.Ajax('../ldap/syncUser.do', {
-            emails: Ext.JSON.encode(emailArray)
+            emails: Ext.JSON.encode(emailArray),
+            ldapbase: searchForm.getForm().getValues()["ldapbase"],
+            ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
           }, function (data) {
             reload();
             MyExt.Msg.alert('同步成功!');

@@ -60,12 +60,14 @@ public class ScimUserService {
 
     public static void addUser(ScimUser scimUser) throws Exception {
         Assert.notNull(scimUser, "scimUser can not be null!");
+        Assert.hasText(scimUser.getEmail(), "email can not be blank!");
         UserResource user = convertToUserResource(scimUser);
         scimService.create("Users", user);
     }
 
     public static void updateUser(ScimUser scimUser) throws Exception {
         Assert.notNull(scimUser, "scimUser can not be null!");
+        Assert.hasText(scimUser.getEmail(), "email can not be blank!");
         Assert.hasText(scimUser.getId(), "id can not be blank!");
         UserResource user = convertToUserResource(scimUser);
 

@@ -14,6 +14,7 @@ import javax.naming.directory.SearchResult;
 import cc.landingzone.dreamweb.common.CommonConstants;
 import cc.landingzone.dreamweb.model.ScimUser;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,15 @@ public class LdapService {
      *
      * @return
      */
-    public List<ScimUser> searchLdapUser() {
+    public List<ScimUser> searchLdapUser(String searchBase, String searchFilter) {
+
+        if (StringUtils.isBlank(searchBase)) {
+            searchBase = CommonConstants.LDAP_Searchbase;
+        }
+        if (StringUtils.isBlank(searchFilter)) {
+            searchFilter = CommonConstants.LDAP_Searchfilter;
+        }
+
         List<ScimUser> scimUserList = new ArrayList<>();
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -51,15 +60,17 @@ public class LdapService {
             // 设置搜索范围
             searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
             // 设置搜索过滤条件
-            String searchFilter = "(objectClass=user)";
+            // String searchFilter = "(objectClass=user)";
             // String searchFilter = "(objectClass=*)";
             // 设置搜索域节点
             // String searchBase = "dc=landingzone,dc=cc";
-            String searchBase = CommonConstants.LDAP_Searchbase;
+            // String searchBase = CommonConstants.LDAP_Searchbase;
             // 定制返回属性,不定制属性，返回所有的属性集
-//            String[] returningAttrs = { "url", "whenChanged", "employeeID", "name", "userPrincipalName",
-//                    "physicalDeliveryOfficeName", "departmentNumber", "telephoneNumber", "homePhone", "mobile",
-//                    "department", "sAMAccountName", "whenChanged", "mail", "givenname", "sn" };
+            // String[] returningAttrs = { "url", "whenChanged", "employeeID", "name",
+            // "userPrincipalName",
+            // "physicalDeliveryOfficeName", "departmentNumber", "telephoneNumber",
+            // "homePhone", "mobile",
+            // "department", "sAMAccountName", "whenChanged", "mail", "givenname", "sn" };
 
             String[] returningAttrs = { CommonConstants.LDAP_ATTR_FIRSTNAME, CommonConstants.LDAP_ATTR_LASTNAME,
                     CommonConstants.LDAP_ATTR_EMAIL, CommonConstants.LDAP_ATTR_EXTERNALID,
@@ -96,8 +107,11 @@ public class LdapService {
                     } else {
                         scimUser.setDisplayName(attributes.get(CommonConstants.LDAP_ATTR_DISPLAYNAME).get().toString());
                     }
-
-                    scimUser.setEmail(attributes.get(CommonConstants.LDAP_ATTR_EMAIL).get().toString());
+                    if (null == attributes.get(CommonConstants.LDAP_ATTR_EMAIL)) {
+                        scimUser.setEmail(" ");
+                    } else {
+                        scimUser.setEmail(attributes.get(CommonConstants.LDAP_ATTR_EMAIL).get().toString());
+                    }
                     scimUserList.add(scimUser);
                 }
             } catch (Exception e) {
