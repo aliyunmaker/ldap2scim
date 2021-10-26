@@ -13,24 +13,37 @@ Ext.onReady(function () {
   });
 
   userStore.on('beforeload', function (store, options) {
-    console.log(searchTextField.getValue());
-    options.params = Ext.apply(options.params || {}, { "simpleSearch": searchTextField.getValue() });
+    options.params = Ext.apply(options.params || {}, { "simpleSearch": searchForm.getForm().getValues() });
   });
 
-  var searchTextField = Ext.create('Ext.form.field.Text', {
-    // xtype: 'textfield',
-    // fieldLabel: '搜索',
-    width: 500,
-    emptyText: 'userName eq "me@chengchao.name"',
-    name: 'simpleSearch',
-    enableKeyEvents: true,
-    listeners: {
-      keypress: function (thiz, e) {
-        if (e.getKey() == Ext.EventObject.ENTER) {
-          userGrid.getPageToolbar().moveFirst();
+
+  var searchForm = Ext.create('Ext.form.Panel', {
+    region: 'north',
+    frame: true,
+    height: 80,
+    bodyStyle: 'padding:15px 0px 0px 10px',
+    fieldDefaults: {
+      labelWidth: 30
+    },
+    defaults: {
+      width: 300
+    },
+    defaultType: 'textfield',
+    buttonAlign: 'left',
+    items: [{
+      fieldLabel: '搜索',
+      width: 600,
+      emptyText: 'userName eq "username"',
+      name: 'simpleSearch',
+      enableKeyEvents: true,
+      listeners: {
+        keypress: function (thiz, e) {
+          if (e.getKey() == Ext.EventObject.ENTER) {
+            userGrid.getPageToolbar().moveFirst();
+          }
         }
       }
-    }
+    }]
   });
 
   var userGrid = Ext.create('MyExt.Component.GridPanel', {
@@ -102,7 +115,7 @@ Ext.onReady(function () {
           });
         });
       }
-    }, searchTextField]
+    }]
   });
 
   var formWindow = new MyExt.Component.FormWindow({
@@ -145,12 +158,7 @@ Ext.onReady(function () {
 
   Ext.create('Ext.container.Viewport', {
     layout: 'border',
-    items: [new Ext.TabPanel({
-      frame: false,
-      split: true,
-      region: 'center',
-      items: [userGrid]
-    })]
+    items: [searchForm, userGrid]
   });
   reload();
 
