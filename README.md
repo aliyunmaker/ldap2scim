@@ -6,6 +6,7 @@ ldap_url = ldap://127.0.0.1:389
 ldap_username = username
 ldap_password = password
 ldap_searchbase = ou=hangzhou,dc=landingzone,dc=cc
+ldap_searchfilter = (objectClass=user)
 
 # 这里是ldap字段和scim字段的对应关系
 ldap_attr_firstname = givenName
