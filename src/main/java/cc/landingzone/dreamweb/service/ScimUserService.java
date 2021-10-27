@@ -37,8 +37,8 @@ public class ScimUserService {
         // System.out.println(result);
 
         ScimUser scimUser = new ScimUser();
-        scimUser.setUserName("test11@chengchao.name");
-        scimUser.setExternalId("test11@chengchao.name");
+        scimUser.setUserName("test1111@chengchao.name");
+        scimUser.setExternalId("test1111@chengchao.name");
         addUser(scimUser);
 
     }
@@ -141,6 +141,8 @@ public class ScimUserService {
         user.setDisplayName(scimUser.getDisplayName());
         Email email = new Email().setType("work").setPrimary(true).setValue(scimUser.getEmail());
         user.setEmails(Collections.singletonList(email));
+        // cloudsso 不支持通过scim写入password
+        // user.setPassword(user.getPassword());
         return user;
     }
 
