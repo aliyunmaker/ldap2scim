@@ -21,7 +21,6 @@ import org.springframework.util.Assert;
 
 import cc.landingzone.dreamweb.common.CommonConstants;
 import cc.landingzone.dreamweb.model.ScimUser;
-import cc.landingzone.dreamweb.utils.JsonUtils;
 
 public class ScimUserService {
 
@@ -33,18 +32,14 @@ public class ScimUserService {
     public static void main(String[] args) throws Exception {
 
         //
-        List<ScimUser> list = searchScimUser(null);
-        String result = JsonUtils.toJsonString(list);
-        System.out.println(result);
+        // List<ScimUser> list = searchScimUser(null);
+        // String result = JsonUtils.toJsonString(list);
+        // System.out.println(result);
 
-        // ScimUser scimUser = new ScimUser();
-        // scimUser.setEmail("ddd1d@chengchao.name");
-        // scimUser.setFirstName("dddd1");
-        // scimUser.setLastName("cheng");
-        // scimUser.setExternalId("0021");
-        // scimUser.setDisplayName("dddd1 cheng");
-        // scimUser.setUserName("dddd1@chengchao.name");
-        // addUser(scimUser);
+        ScimUser scimUser = new ScimUser();
+        scimUser.setUserName("test11@chengchao.name");
+        scimUser.setExternalId("test11@chengchao.name");
+        addUser(scimUser);
 
     }
 
@@ -60,14 +55,16 @@ public class ScimUserService {
 
     public static void addUser(ScimUser scimUser) throws Exception {
         Assert.notNull(scimUser, "scimUser can not be null!");
-        Assert.hasText(scimUser.getEmail(), "email can not be blank!");
+        Assert.hasText(scimUser.getUserName(), "username can not be blank!");
+        Assert.hasText(scimUser.getExternalId(), "externalId can not be blank!");
         UserResource user = convertToUserResource(scimUser);
         scimService.create("Users", user);
     }
 
     public static void updateUser(ScimUser scimUser) throws Exception {
         Assert.notNull(scimUser, "scimUser can not be null!");
-        Assert.hasText(scimUser.getEmail(), "email can not be blank!");
+        Assert.hasText(scimUser.getUserName(), "username can not be blank!");
+        Assert.hasText(scimUser.getExternalId(), "externalId can not be blank!");
         Assert.hasText(scimUser.getId(), "id can not be blank!");
         UserResource user = convertToUserResource(scimUser);
 
