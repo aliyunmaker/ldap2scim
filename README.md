@@ -39,6 +39,8 @@ ldap_attr_username = userPrincipalName
 
 
 
-# 截屏
+# LDAP搜索
 
 ![screenshot1](image/screenshot1.png)
+
+LDAP的搜索语法可以[参考这里](https://www.cnblogs.com/dreamer-fish/p/5832735.html)
