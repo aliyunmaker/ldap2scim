@@ -20,7 +20,7 @@ ldap_attr_username = userPrincipalName
 #### 读取顺序
 
 - dreamweb.jar同目录下的dreamweb.properties
-- home目录下的dreamweb.properties
+- 用户home/config/目录下的dreamweb.properties
 
 #### key_aliyun_cloudsso
 
