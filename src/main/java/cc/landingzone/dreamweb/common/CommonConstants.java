@@ -3,6 +3,7 @@ package cc.landingzone.dreamweb.common;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -64,14 +65,16 @@ public class CommonConstants {
         try {
             File file = new File(System.getProperty("user.dir") + CONFIG_FILE_NAME);
             if (!file.exists()) {
-                file = new File(System.getProperty("user.home") + CONFIG_FILE_NAME);
+                file = new File(System.getProperty("user.home") + "/config" + CONFIG_FILE_NAME);
             }
             if (!file.exists()) {
                 throw new RuntimeException("can not find config file!");
             }
             InputStream ins = new FileInputStream(file);
-            properties.load(ins);
+            InputStreamReader reader = new InputStreamReader(ins, "UTF-8");
+            properties.load(reader);
             ins.close();
+            reader.close();
             logger.info("load config file:" + file.getAbsolutePath());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
