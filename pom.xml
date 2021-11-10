@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cc.landingzone</groupId>
-	<artifactId>dreamweb</artifactId>
+	<artifactId>ldap2cloudsso</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>dreamweb</name>
 	<description>landingzone demo web</description>
@@ -78,7 +78,7 @@
 							<goal>repackage</goal>
 						</goals>
 						<configuration>
-							<finalName>dreamweb</finalName>
+							<finalName>ldap2cloudsso</finalName>
 						</configuration>
 					</execution>
 				</executions>

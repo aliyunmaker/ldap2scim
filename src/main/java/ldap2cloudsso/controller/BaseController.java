@@ -1,10 +1,11 @@
-package cc.landingzone.dreamweb.controller;
+package ldap2cloudsso.controller;
 
-import cc.landingzone.dreamweb.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletResponse;
+
+import ldap2cloudsso.utils.JsonUtils;
 
 public class BaseController {
 

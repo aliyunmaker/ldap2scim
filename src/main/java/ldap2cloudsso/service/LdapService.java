@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.service;
+package ldap2cloudsso.service;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -11,9 +11,8 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import cc.landingzone.dreamweb.common.CommonConstants;
-import cc.landingzone.dreamweb.model.ScimUser;
-
+import ldap2cloudsso.common.CommonConstants;
+import ldap2cloudsso.model.ScimUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

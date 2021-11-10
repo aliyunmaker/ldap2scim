@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.controller;
+package ldap2cloudsso.controller;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cc.landingzone.dreamweb.model.ScimUser;
-import cc.landingzone.dreamweb.model.WebResult;
-import cc.landingzone.dreamweb.service.ScimUserService;
-import cc.landingzone.dreamweb.utils.JsonUtils;
+import ldap2cloudsso.model.ScimUser;
+import ldap2cloudsso.model.WebResult;
+import ldap2cloudsso.service.ScimUserService;
+import ldap2cloudsso.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

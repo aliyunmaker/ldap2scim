@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.common;
+package ldap2cloudsso.common;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +27,7 @@ public class CommonConstants {
     public static final String LDAP_ATTR_DISPLAYNAME;
     public static final String LDAP_ATTR_USERNAME;
 
-    public static final String CONFIG_FILE_NAME = "/dreamweb.properties";
+    public static final String CONFIG_FILE_NAME = "/ldap2cloudsso.properties";
 
     static {
         Properties properties = loadProperties();

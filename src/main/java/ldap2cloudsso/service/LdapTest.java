@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.service;
+package ldap2cloudsso.service;
 
 import java.util.Hashtable;
 
@@ -10,7 +10,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import cc.landingzone.dreamweb.common.CommonConstants;
+import ldap2cloudsso.common.CommonConstants;
 
 /**
  * ldap test

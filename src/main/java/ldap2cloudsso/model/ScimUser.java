@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.model;
+package ldap2cloudsso.model;
 
 public class ScimUser implements Comparable<ScimUser> {
 

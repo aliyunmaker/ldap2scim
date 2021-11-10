@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.controller;
+package ldap2cloudsso.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,17 +7,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ldap2cloudsso.model.ScimUser;
+import ldap2cloudsso.model.WebResult;
+import ldap2cloudsso.service.LdapService;
+import ldap2cloudsso.service.ScimUserService;
+import ldap2cloudsso.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import cc.landingzone.dreamweb.model.ScimUser;
-import cc.landingzone.dreamweb.model.WebResult;
-import cc.landingzone.dreamweb.service.LdapService;
-import cc.landingzone.dreamweb.service.ScimUserService;
-import cc.landingzone.dreamweb.utils.JsonUtils;
 
 /**
  * ldap

@@ -1,11 +1,11 @@
-package cc.landingzone.dreamweb.controller;
+package ldap2cloudsso.controller;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cc.landingzone.dreamweb.model.WebResult;
+import ldap2cloudsso.model.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

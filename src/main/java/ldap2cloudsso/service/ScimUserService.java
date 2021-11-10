@@ -1,4 +1,4 @@
-package cc.landingzone.dreamweb.service;
+package ldap2cloudsso.service;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -15,12 +15,10 @@ import com.unboundid.scim2.common.types.Email;
 import com.unboundid.scim2.common.types.Meta;
 import com.unboundid.scim2.common.types.Name;
 import com.unboundid.scim2.common.types.UserResource;
-
+import ldap2cloudsso.common.CommonConstants;
+import ldap2cloudsso.model.ScimUser;
 import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
 import org.springframework.util.Assert;
-
-import cc.landingzone.dreamweb.common.CommonConstants;
-import cc.landingzone.dreamweb.model.ScimUser;
 
 public class ScimUserService {
 
