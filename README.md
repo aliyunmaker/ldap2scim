@@ -19,8 +19,8 @@ ldap_attr_username = userPrincipalName
 
 #### 读取顺序
 
-- dreamweb.jar同目录下的dreamweb.properties
-- 用户home/config/目录下的dreamweb.properties
+- ldap2cloudsso.jar同目录下的ldap2cloudsso.properties
+- 用户home/config/目录下的ldap2cloudsso.properties
 
 #### key_aliyun_cloudsso
 
@@ -28,8 +28,12 @@ ldap_attr_username = userPrincipalName
 
 
 
-# 启动类(springboot)
-`cc.landingzone.dreamweb.DreamwebApplication`
+# 启动(springboot)
+代码启动: main class: `ldap2cloudsso.Ldap2cloudssoApplication`
+
+jar包启动: java -jar ldap2cloudsso.jar
+
+
 
 
 
