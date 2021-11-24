@@ -15,10 +15,12 @@ import com.unboundid.scim2.common.types.Email;
 import com.unboundid.scim2.common.types.Meta;
 import com.unboundid.scim2.common.types.Name;
 import com.unboundid.scim2.common.types.UserResource;
-import ldap2cloudsso.common.CommonConstants;
-import ldap2cloudsso.model.ScimUser;
+
 import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
 import org.springframework.util.Assert;
+
+import ldap2cloudsso.common.CommonConstants;
+import ldap2cloudsso.model.ScimUser;
 
 public class ScimUserService {
 
@@ -34,21 +36,37 @@ public class ScimUserService {
         // String result = JsonUtils.toJsonString(list);
         // System.out.println(result);
 
-        ScimUser scimUser = new ScimUser();
-        scimUser.setUserName("test1111@chengchao.name");
-        scimUser.setExternalId("test1111@chengchao.name");
-        addUser(scimUser);
-
+        for (int i = 0; i < 1000; i++) {
+            ScimUser scimUser = new ScimUser();
+            scimUser.setFirstName("counttest22" + i);
+            scimUser.setLastName("counttest22" + i);
+            scimUser.setUserName("testcount22" + i + "@chengchao.name");
+            scimUser.setExternalId("testcount22+" + i + "@chengchao.name");
+            addUser(scimUser);
+            Thread.sleep(100);
+            System.out.println("done:" + i);
+        }
     }
 
     private static ScimService scimService;
 
     public static List<ScimUser> searchScimUser(String filter) throws Exception {
-        ListResponse<UserResource> list = scimService.search("Users", filter, UserResource.class);
-        // System.out.println("filter:" + filter);
-        // System.out.println("==================================");
-        // System.out.println(JsonUtils.toJsonString(list));
-        return convertToScimUser(list.getResources());
+        List<UserResource> userList = new ArrayList<>();
+        // 最大支持一千条
+        for (int i = 0; i < 11; i++) {
+            ListResponse<UserResource> list = scimService.searchRequest("Users").filter(filter).page(i, 100)
+                    .invoke(UserResource.class);
+            List<UserResource> tmp = list.getResources();
+            userList.addAll(tmp);
+            // System.out.println(tmp.size() + " :i:" + i);
+            if (tmp.size() < 100) {
+                break;
+            }
+        }
+
+        // ListResponse<UserResource> list = scimService.search("Users", filter,
+        // UserResource.class);
+        return convertToScimUser(userList);
     }
 
     public static void addUser(ScimUser scimUser) throws Exception {
