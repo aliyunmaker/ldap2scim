@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,11 +64,23 @@ public class CommonConstants {
     public static Properties loadProperties() {
         Properties properties = new Properties();
         try {
-            File file = new File(System.getProperty("user.dir") + CONFIG_FILE_NAME);
-            if (!file.exists()) {
-                file = new File(System.getProperty("user.home") + "/config" + CONFIG_FILE_NAME);
+            File file = null;
+            String configPath = System.getProperty("configPath");
+            if (StringUtils.isNotBlank(configPath)) {
+                file = new File(configPath);
+            }
+            if (StringUtils.isBlank(configPath) || !file.exists()) {
+                logger.info("[1]can not find config file[-D]:" + configPath);
+                configPath = System.getProperty("user.dir") + CONFIG_FILE_NAME;
+                file = new File(configPath);
             }
             if (!file.exists()) {
+                logger.info("[2]can not find config file[user.dir]:" + configPath);
+                configPath = System.getProperty("user.home") + "/config" + CONFIG_FILE_NAME;
+                file = new File(configPath);
+            }
+            if (!file.exists()) {
+                logger.info("[3]can not find config file[user.home]:" + configPath);
                 throw new RuntimeException("can not find config file!");
             }
             InputStream ins = new FileInputStream(file);
