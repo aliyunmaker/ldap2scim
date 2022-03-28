@@ -18,7 +18,7 @@ ldap_attr_username = userPrincipalName
 ```
 
 #### 读取顺序
-
+- 运行时参数,示例: java -jar -DconfigPath=/home/test/ldap2cloudsso.properties ldap2cloudsso.jar  
 - ldap2cloudsso.jar同目录下的ldap2cloudsso.properties
 - 用户home/config/目录下的ldap2cloudsso.properties
 

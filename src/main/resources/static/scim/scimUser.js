@@ -102,13 +102,21 @@ Ext.onReady(function () {
       text: '删除',
       iconCls: 'MyExt-delete',
       handler: function () {
-        var select = MyExt.util.SelectGridModel(userGrid, true);
+        var select = MyExt.util.SelectGridModel(userGrid, false);
         if (!select) {
           return;
         }
-        MyExt.util.MessageConfirm('是否确定删除', function () {
+        if (select.length > 50) {
+          MyExt.Msg.alert('一次删除不能超过50');
+          return;
+        }
+        let idArray = new Array();
+        for (let i = 0; i < select.length; i++) {
+          idArray[i] = select[i].data["id"];
+        }
+        MyExt.util.MessageConfirm('选中:' + select.length + ' ,是否确定删除', function () {
           MyExt.util.Ajax('../scimUser/deleteUser.do', {
-            id: select[0].data["id"],
+            idArray: Ext.JSON.encode(idArray),
           }, function (data) {
             reload();
             MyExt.Msg.alert('删除成功!');

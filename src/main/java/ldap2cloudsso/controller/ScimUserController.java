@@ -80,8 +80,12 @@ public class ScimUserController extends BaseController {
     public void deleteUser(HttpServletRequest request, HttpServletResponse response) {
         WebResult result = new WebResult();
         try {
-            String id = request.getParameter("id");
-            ScimUserService.deleteUser(id);
+            String idArray = request.getParameter("idArray");
+            List<String> idList = JsonUtils.parseArray(idArray, String.class);
+            // String id = request.getParameter("id");
+            for (String id : idList) {
+                ScimUserService.deleteUser(id);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             result.setSuccess(false);
