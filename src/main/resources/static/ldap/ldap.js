@@ -70,6 +70,18 @@ Ext.onReady(function () {
       header: 'ID',
       width: 200
     }, {
+      dataIndex: 'id',
+      header: "同步",
+      width: 50,
+      align: 'center',
+      renderer: function (value) {
+        if (value && value != "") {
+          return '<img src="https://ichengchao.oss-cn-hangzhou.aliyuncs.com/static/image/icon/safe.png" />';
+        } else {
+          return "";
+        }
+      }
+    }, {
       dataIndex: 'firstName',
       header: "firstName",
       width: 150,

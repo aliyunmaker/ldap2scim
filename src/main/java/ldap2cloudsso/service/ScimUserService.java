@@ -9,15 +9,15 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
+import org.springframework.util.Assert;
+
 import com.unboundid.scim2.client.ScimService;
 import com.unboundid.scim2.common.messages.ListResponse;
 import com.unboundid.scim2.common.types.Email;
 import com.unboundid.scim2.common.types.Meta;
 import com.unboundid.scim2.common.types.Name;
 import com.unboundid.scim2.common.types.UserResource;
-
-import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
-import org.springframework.util.Assert;
 
 import ldap2cloudsso.common.CommonConstants;
 import ldap2cloudsso.model.ScimUser;
@@ -32,20 +32,20 @@ public class ScimUserService {
     public static void main(String[] args) throws Exception {
 
         //
-        // List<ScimUser> list = searchScimUser(null);
-        // String result = JsonUtils.toJsonString(list);
-        // System.out.println(result);
+         List<ScimUser> list = searchScimUser(null);
+//         String result = JsonUtils.toJsonString(list);
+         System.out.println(list.size());
 
-        for (int i = 0; i < 1000; i++) {
-            ScimUser scimUser = new ScimUser();
-            scimUser.setFirstName("counttest22" + i);
-            scimUser.setLastName("counttest22" + i);
-            scimUser.setUserName("testcount22" + i + "@chengchao.name");
-            scimUser.setExternalId("testcount22+" + i + "@chengchao.name");
-            addUser(scimUser);
-            Thread.sleep(100);
-            System.out.println("done:" + i);
-        }
+//        for (int i = 0; i < 1000; i++) {
+//            ScimUser scimUser = new ScimUser();
+//            scimUser.setFirstName("counttest22" + i);
+//            scimUser.setLastName("counttest22" + i);
+//            scimUser.setUserName("testcount22" + i + "@chengchao.name");
+//            scimUser.setExternalId("testcount22+" + i + "@chengchao.name");
+//            addUser(scimUser);
+//            Thread.sleep(100);
+//            System.out.println("done:" + i);
+//        }
     }
 
     private static ScimService scimService;
