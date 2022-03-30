@@ -83,8 +83,34 @@ public class ScimUserController extends BaseController {
             String idArray = request.getParameter("idArray");
             List<String> idList = JsonUtils.parseArray(idArray, String.class);
             // String id = request.getParameter("id");
-            for (String id : idList) {
-                ScimUserService.deleteUser(id);
+            if (idList.size() <= 20) {
+                for (String id : idList) {
+                    ScimUserService.deleteUser(id);
+                }
+                result.setData("删除成功!");
+            } else {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        int deleteCount = 0;
+                        try {
+                            for (String id : idList) {
+                                Thread.sleep(10);
+                                ScimUserService.deleteUser(id);
+                                deleteCount++;
+                                logger.info("delete success[" + deleteCount + "]:" + id);
+                            }
+                        } catch (Exception e) {
+                            logger.error(e.getMessage(), e);
+                        } finally {
+                            logger.info("expect delete count: " + idList.size());
+                            logger.info("actual delete count: " + deleteCount);
+                        }
+
+                    }
+                }, "deleteSCIMUser" + System.currentTimeMillis()).start();
+                result.setData("后台删除中,请查看后台日志!");
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

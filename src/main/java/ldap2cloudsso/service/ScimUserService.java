@@ -9,6 +9,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
 import org.springframework.util.Assert;
 
@@ -24,38 +25,38 @@ import ldap2cloudsso.model.ScimUser;
 
 public class ScimUserService {
 
-    private final static String SCIM_SERVER_URL_ALIYUN_CLOUDSSO = "https://cloudsso-scim-cn-shanghai.aliyun.com/scim/v2";
+    private final static String SCIM_SERVER_URL_ALIYUN_CLOUDSSO =
+        "https://cloudsso-scim-cn-shanghai.aliyun.com/scim/v2";
     static {
         scimService = buildScimService(SCIM_SERVER_URL_ALIYUN_CLOUDSSO, CommonConstants.KEY_ALIYUN_CLOUDSSO);
     }
 
     public static void main(String[] args) throws Exception {
+        // List<ScimUser> list = searchScimUser(null);
+        // String result = JsonUtils.toJsonString(list);
+        // System.out.println(list.size());
 
-        //
-         List<ScimUser> list = searchScimUser(null);
-//         String result = JsonUtils.toJsonString(list);
-         System.out.println(list.size());
-
-//        for (int i = 0; i < 1000; i++) {
-//            ScimUser scimUser = new ScimUser();
-//            scimUser.setFirstName("counttest22" + i);
-//            scimUser.setLastName("counttest22" + i);
-//            scimUser.setUserName("testcount22" + i + "@chengchao.name");
-//            scimUser.setExternalId("testcount22+" + i + "@chengchao.name");
-//            addUser(scimUser);
-//            Thread.sleep(100);
-//            System.out.println("done:" + i);
-//        }
+        for (int i = 1; i <= 1100; i++) {
+            String suffix = StringUtils.leftPad("" + i, 4, '0');
+            ScimUser scimUser = new ScimUser();
+            scimUser.setFirstName("counttest" + suffix);
+            scimUser.setLastName("counttest" + suffix);
+            scimUser.setUserName("testcount" + suffix + "@chengchao.name");
+            scimUser.setExternalId("testcount+" + suffix + "@chengchao.name");
+            addUser(scimUser);
+            Thread.sleep(10);
+            System.out.println("done:" + i);
+        }
     }
 
     private static ScimService scimService;
 
     public static List<ScimUser> searchScimUser(String filter) throws Exception {
         List<UserResource> userList = new ArrayList<>();
-        // 最大支持一千条
-        for (int i = 0; i < 11; i++) {
+        // RAM最大支持一千条
+        for (int i = 0; i < 12; i++) {
             ListResponse<UserResource> list = scimService.searchRequest("Users").filter(filter).page(i, 100)
-                    .invoke(UserResource.class);
+                .invoke(UserResource.class);
             List<UserResource> tmp = list.getResources();
             userList.addAll(tmp);
             // System.out.println(tmp.size() + " :i:" + i);

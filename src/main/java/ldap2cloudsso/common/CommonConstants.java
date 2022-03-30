@@ -28,7 +28,7 @@ public class CommonConstants {
     public static final String LDAP_ATTR_DISPLAYNAME;
     public static final String LDAP_ATTR_USERNAME;
 
-    public static final String CONFIG_FILE_NAME = "/ldap2cloudsso.properties";
+    public static final String CONFIG_FILE_NAME = File.separator + "ldap2cloudsso.properties";
 
     static {
         Properties properties = loadProperties();
@@ -76,7 +76,7 @@ public class CommonConstants {
             }
             if (!file.exists()) {
                 logger.info("[2]can not find config file[user.dir]:" + configPath);
-                configPath = System.getProperty("user.home") + "/config" + CONFIG_FILE_NAME;
+                configPath = System.getProperty("user.home") + File.separator + "config" + CONFIG_FILE_NAME;
                 file = new File(configPath);
             }
             if (!file.exists()) {

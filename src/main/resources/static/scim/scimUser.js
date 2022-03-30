@@ -106,10 +106,10 @@ Ext.onReady(function () {
         if (!select) {
           return;
         }
-        if (select.length > 50) {
-          MyExt.Msg.alert('一次删除不能超过50');
-          return;
-        }
+        // if (select.length > 50) {
+        //   MyExt.Msg.alert('一次删除不能超过50');
+        //   return;
+        // }
         let idArray = new Array();
         for (let i = 0; i < select.length; i++) {
           idArray[i] = select[i].data["id"];
@@ -119,7 +119,8 @@ Ext.onReady(function () {
             idArray: Ext.JSON.encode(idArray),
           }, function (data) {
             reload();
-            MyExt.Msg.alert('删除成功!');
+            // MyExt.Msg.alert('删除成功!');
+            MyExt.Msg.alert(data.data);
           });
         });
       }
