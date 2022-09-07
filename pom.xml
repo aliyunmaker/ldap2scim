@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -12,8 +10,8 @@
 	<groupId>cc.landingzone</groupId>
 	<artifactId>ldap2cloudsso</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dreamweb</name>
-	<description>landingzone demo web</description>
+	<name>ldap2cloudsso</name>
+	<description>sync users from ldap to aliyun cloudsso</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -38,30 +36,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.unboundid.product.scim2</groupId>
-			<artifactId>scim2-sdk-client</artifactId>
-			<version>2.3.5</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.security/oauth2-client -->
-		<dependency>
-			<groupId>org.glassfish.jersey.security</groupId>
-			<artifactId>oauth2-client</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<!-- httpclient 4.5 -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>fluent-hc</artifactId>
 		</dependency>
 
 	</dependencies>
