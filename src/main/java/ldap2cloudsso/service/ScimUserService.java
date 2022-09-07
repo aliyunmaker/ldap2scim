@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.util.concurrent.RateLimiter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class ScimUserService {
     private static String ScimKey = CommonConstants.KEY_ALIYUN_CLOUDSSO;
 
     private static Logger logger = LoggerFactory.getLogger(ScimUserService.class);
+
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
 
     public static void main(String[] args) throws Exception {
         ScimUser scimUser = new ScimUser();
@@ -56,6 +59,7 @@ public class ScimUserService {
     }
 
     public static void addUser(ScimUser scimUser) throws Exception {
+        RATE_LIMITER.acquire(1);
         Assert.notNull(scimUser, "scimUser can not be null!");
         UserResource user = convertToUserResource(scimUser);
         Map<String, String> header = new HashMap<>();
@@ -64,6 +68,7 @@ public class ScimUserService {
     }
 
     public static void updateUser(ScimUser scimUser) throws Exception {
+        RATE_LIMITER.acquire(1);
         Assert.notNull(scimUser, "scimUser can not be null!");
         Assert.hasText(scimUser.getId(), "id can not be blank!");
         UserResource user = convertToUserResource(scimUser);
@@ -76,11 +81,11 @@ public class ScimUserService {
     }
 
     public static void deleteUser(String id) throws Exception {
+        RATE_LIMITER.acquire(1);
         Assert.hasText(id, "id can not be blank!");
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", "Bearer " + ScimKey);
         HttpClientUtils.deleteFromUrlWithHeader(ScimURL + "/Users/" + id, header);
-
     }
 
     public static List<ScimUser> convertToScimUser(List<UserResource> userResourceList) {
