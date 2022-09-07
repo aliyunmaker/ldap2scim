@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 dreamweb.iml
 dreamweb.properties
+ldap2cloudsso.properties
 application-*.properties
 
 config/

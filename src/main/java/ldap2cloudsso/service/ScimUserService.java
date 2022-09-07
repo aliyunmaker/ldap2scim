@@ -9,6 +9,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
+import com.google.common.util.concurrent.RateLimiter;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.oauth2.OAuth2ClientSupport;
 import org.springframework.util.Assert;
@@ -31,6 +32,8 @@ public class ScimUserService {
         scimService = buildScimService(SCIM_SERVER_URL_ALIYUN_CLOUDSSO, CommonConstants.KEY_ALIYUN_CLOUDSSO);
     }
 
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
+
     public static void main(String[] args) throws Exception {
         // List<ScimUser> list = searchScimUser(null);
         // String result = JsonUtils.toJsonString(list);
@@ -52,25 +55,31 @@ public class ScimUserService {
     private static ScimService scimService;
 
     public static List<ScimUser> searchScimUser(String filter) throws Exception {
+
         List<UserResource> userList = new ArrayList<>();
-        // RAM最大支持一千条
-        for (int i = 0; i < 12; i++) {
-            ListResponse<UserResource> list = scimService.searchRequest("Users").filter(filter).page(i, 100)
+        int maxIndex = 1;
+        int startIndex = 1;
+        final int count = 100;
+        // CloudSSO默认quota为一千条
+        while (startIndex <= maxIndex) {
+            RATE_LIMITER.acquire(1);
+            ListResponse<UserResource> list = scimService.searchRequest("Users").filter(filter).page(startIndex, count)
                 .invoke(UserResource.class);
+            int totalResult = list.getTotalResults();
+            if (totalResult % count == 0) {
+                maxIndex = totalResult / count;
+            } else {
+                maxIndex = totalResult / count + 1;
+            }
             List<UserResource> tmp = list.getResources();
             userList.addAll(tmp);
-            // System.out.println(tmp.size() + " :i:" + i);
-            if (tmp.size() < 100) {
-                break;
-            }
+            startIndex = startIndex + 1;
         }
-
-        // ListResponse<UserResource> list = scimService.search("Users", filter,
-        // UserResource.class);
         return convertToScimUser(userList);
     }
 
     public static void addUser(ScimUser scimUser) throws Exception {
+        RATE_LIMITER.acquire(1);
         Assert.notNull(scimUser, "scimUser can not be null!");
         Assert.hasText(scimUser.getUserName(), "username can not be blank!");
         Assert.hasText(scimUser.getExternalId(), "externalId can not be blank!");
@@ -79,6 +88,7 @@ public class ScimUserService {
     }
 
     public static void updateUser(ScimUser scimUser) throws Exception {
+        RATE_LIMITER.acquire(1);
         Assert.notNull(scimUser, "scimUser can not be null!");
         Assert.hasText(scimUser.getUserName(), "username can not be blank!");
         Assert.hasText(scimUser.getExternalId(), "externalId can not be blank!");
@@ -93,9 +103,9 @@ public class ScimUserService {
     }
 
     public static void deleteUser(String id) throws Exception {
+        RATE_LIMITER.acquire(1);
         Assert.hasText(id, "id can not be blank!");
         scimService.delete("Users", id);
-
     }
 
     public static ScimService buildScimService(String url, String oauthKey) {
