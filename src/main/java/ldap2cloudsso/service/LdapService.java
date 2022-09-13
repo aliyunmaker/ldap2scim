@@ -6,17 +6,19 @@ import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import ldap2cloudsso.common.CommonConstants;
-import ldap2cloudsso.model.ScimUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import ldap2cloudsso.common.CommonConstants;
+import ldap2cloudsso.model.ScimUser;
 
 /**
  * 
@@ -71,9 +73,10 @@ public class LdapService {
             // "homePhone", "mobile",
             // "department", "sAMAccountName", "whenChanged", "mail", "givenname", "sn" };
 
-            String[] returningAttrs = { CommonConstants.LDAP_ATTR_FIRSTNAME, CommonConstants.LDAP_ATTR_LASTNAME,
-                    CommonConstants.LDAP_ATTR_EMAIL, CommonConstants.LDAP_ATTR_EXTERNALID,
-                    CommonConstants.LDAP_ATTR_DISPLAYNAME, CommonConstants.LDAP_ATTR_USERNAME };
+            String[] returningAttrs = {CommonConstants.LDAP_ATTR_FIRSTNAME, CommonConstants.LDAP_ATTR_LASTNAME,
+                CommonConstants.LDAP_ATTR_EMAIL, CommonConstants.LDAP_ATTR_EXTERNALID,
+                CommonConstants.LDAP_ATTR_DISPLAYNAME, CommonConstants.LDAP_ATTR_USERNAME, "member",
+                "distinguishedName", "uniqueMember"};
             searchCtls.setReturningAttributes(returningAttrs);
             try {
                 NamingEnumeration<SearchResult> searchResults = dc.search(searchBase, searchFilter, searchCtls);
@@ -111,7 +114,20 @@ public class LdapService {
                     } else {
                         scimUser.setEmail(attributes.get(CommonConstants.LDAP_ATTR_EMAIL).get().toString());
                     }
+
+                    if (null != attributes.get("member")) {
+                        System.out.println(attributes.get("member").get());
+                    }
                     scimUserList.add(scimUser);
+
+                    System.out.println("==================================");
+                    // System.out.println(attributes);
+                    NamingEnumeration<?> attribute = attributes.getAll();
+                    while (attribute.hasMoreElements()) {
+                        Attribute item = (Attribute)attribute.nextElement();
+                        System.out.println(item.getID() + " = " + item.get());
+                    }
+
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
