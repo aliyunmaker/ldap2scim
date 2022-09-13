@@ -70,16 +70,16 @@ public class CommonConstants {
                 file = new File(configPath);
             }
             if (StringUtils.isBlank(configPath) || !file.exists()) {
-                logger.info("[1]can not find config file[-D]:" + configPath);
                 configPath = System.getProperty("user.dir") + CONFIG_FILE_NAME;
                 file = new File(configPath);
             }
             if (!file.exists()) {
-                logger.info("[2]can not find config file[user.dir]:" + configPath);
                 configPath = System.getProperty("user.home") + File.separator + "config" + CONFIG_FILE_NAME;
                 file = new File(configPath);
             }
             if (!file.exists()) {
+                logger.info("[1]can not find config file[-D]:" + configPath);
+                logger.info("[2]can not find config file[user.dir]:" + configPath);
                 logger.info("[3]can not find config file[user.home]:" + configPath);
                 throw new RuntimeException("can not find config file!");
             }
