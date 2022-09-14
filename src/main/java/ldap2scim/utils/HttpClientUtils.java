@@ -1,3 +1,4 @@
+package ldap2scim.utils;
 ///**
 // * Project: armory-core
 // * <p>

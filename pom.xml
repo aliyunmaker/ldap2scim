@@ -8,10 +8,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cc.landingzone</groupId>
-	<artifactId>ldap2cloudsso</artifactId>
+	<artifactId>ldap2scim</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ldap2cloudsso</name>
-	<description>sync users from ldap to aliyun cloudsso</description>
+	<name>ldap2scim</name>
+	<description>sync users from ldap to scim</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -73,6 +73,13 @@
 			<version>2.9.1</version>
 		</dependency>
 		-->
+		
+		
+		<!-- do not use it in online env -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 
 
 	</dependencies>

@@ -1,4 +1,4 @@
-package ldap2cloudsso.model;
+package ldap2scim.model;
 
 import org.springframework.util.Assert;
 
@@ -11,6 +11,7 @@ public class Page {
 
     private Integer start;
     private Integer limit;
+    private Integer page;
 
     private Integer total;
 
@@ -20,6 +21,13 @@ public class Page {
         Assert.notNull(limit, "limit can not be null!");
         this.start = start;
         this.limit = limit;
+    }
+
+    public Page(Integer start, Integer limit, Integer page) {
+        super();
+        this.start = start;
+        this.limit = limit;
+        this.page = page;
     }
 
     @Override
@@ -49,6 +57,14 @@ public class Page {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getPage() {
+        return page;
     }
 
 }

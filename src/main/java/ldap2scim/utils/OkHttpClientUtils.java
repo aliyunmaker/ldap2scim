@@ -1,4 +1,4 @@
-package ldap2cloudsso.utils;
+package ldap2scim.utils;
 
 import java.util.HashMap;
 import java.util.Map;

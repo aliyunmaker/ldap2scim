@@ -1,4 +1,4 @@
-package ldap2cloudsso.service;
+package ldap2scim.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,81 +13,79 @@ import org.springframework.util.Assert;
 
 import com.google.common.util.concurrent.RateLimiter;
 
-import ldap2cloudsso.common.CommonConstants;
-import ldap2cloudsso.model.ScimResult;
-import ldap2cloudsso.model.ScimUser;
-import ldap2cloudsso.model.UserResource;
-import ldap2cloudsso.model.UserResourceEmail;
-import ldap2cloudsso.model.UserResourceName;
-import ldap2cloudsso.utils.JsonUtils;
-import ldap2cloudsso.utils.OkHttpClientUtils;
-import ldap2cloudsso.utils.UUIDUtils;
+import ldap2scim.common.CommonConstants;
+import ldap2scim.model.Page;
+import ldap2scim.model.ScimUser;
+import ldap2scim.model.ScimUserResult;
+import ldap2scim.model.UserResource;
+import ldap2scim.model.UserResourceEmail;
+import ldap2scim.model.UserResourceName;
+import ldap2scim.utils.JsonUtils;
+import ldap2scim.utils.OkHttpClientUtils;
 
 public class ScimUserService {
 
-    private static String ScimURL = "https://cloudsso-scim-cn-shanghai.aliyun.com/scim/v2";
-    private static String ScimKey = CommonConstants.KEY_ALIYUN_CLOUDSSO;
+    public static final String ScimUsersURL = CommonConstants.SCIM_URL + "/Users";
+    private static final Map<String, String> AuthHeader = new HashMap<>();
+
+    static {
+        AuthHeader.put("Authorization", "Bearer " + CommonConstants.SCIM_KEY);
+    }
 
     private static Logger logger = LoggerFactory.getLogger(ScimUserService.class);
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
 
     public static void main(String[] args) throws Exception {
-        // List<ScimUser> list = searchScimUser(null);
-        // String result = JsonUtils.toJsonString(list);
-        // System.out.println(list.size());
+        ScimUser scimUser = new ScimUser();
+        scimUser.setGivenName("二");
+        scimUser.setFamilyName("程");
+        scimUser.setUserName("11cheng2222");
+        scimUser.setEmail("cheng2222@landingzone.cc");
+        scimUser.setExternalId("11CN=程二,OU=hangzhou,DC=landingzone,DC=cc");
+        addUser(scimUser);
+    }
 
-        for (int i = 5; i <= 10; i++) {
+    public static void main2(String[] args) throws Exception {
+        for (int i = 15; i <= 30; i++) {
             String suffix = StringUtils.leftPad("" + i, 4, '0');
             ScimUser scimUser = new ScimUser();
-            scimUser.setFirstName("counttest" + suffix);
-            scimUser.setLastName("counttest" + suffix);
-            scimUser.setUserName("testcount" + suffix + "@chengchao.name");
-            scimUser.setExternalId("testcount+" + suffix + "@chengchao.name");
+            scimUser.setGivenName("givenName" + suffix);
+            scimUser.setFamilyName("familyName" + suffix);
+            scimUser.setUserName("userName" + suffix);
+            scimUser.setExternalId("externalId+" + suffix + "@chengchao.name");
             addUser(scimUser);
             Thread.sleep(10);
             System.out.println("done:" + i);
         }
     }
 
-    public static void main1(String[] args) throws Exception {
-        ScimUser scimUser = new ScimUser();
-        scimUser.setDisplayName("cheng1234");
-        scimUser.setExternalId(UUIDUtils.generateUUID());
-        scimUser.setUserName("cheng1234");
-        addUser(scimUser);
-    }
-
-    public static List<ScimUser> searchScimUser(String filter) throws Exception {
-        Map<String, String> header = new HashMap<>();
-        header.put("Authorization", "Bearer " + ScimKey);
+    public static List<ScimUser> searchScimUser(String filter, Page page) throws Exception {
         Map<String, String> params = new HashMap<>();
-        params.put("startIndex", "0");
-        params.put("count", "100");
+        if (null != page) {
+            // FIXME 服务端有bug待修复,startIndex先当做page使用
+            params.put("startIndex", String.valueOf(page.getPage()));
+            params.put("count", String.valueOf(page.getLimit()));
+        }
         if (StringUtils.isNotBlank(filter)) {
             params.put("filter", filter);
         }
-        // String result = HttpClientUtils.getDataAsStringFromUrlWithHeader(
-        // ScimURL + "/Users", params, header);
-        String result = OkHttpClientUtils.get(
-            ScimURL + "/Users", params, header);
-        ScimResult scimResult = JsonUtils.parseObject(result, ScimResult.class);
+        String result = OkHttpClientUtils.get(ScimUsersURL, params, AuthHeader);
+        ScimUserResult scimResult = JsonUtils.parseObject(result, ScimUserResult.class);
         List<UserResource> list = scimResult.getResources();
+        page.setTotal(scimResult.getTotalResults());
         logger.info("filter:" + filter);
         logger.info("==================================");
         logger.info(String.valueOf(list.size()));
-        return convertToScimUser(list);
+        // return list;
+        return convertToScimUserList(list);
     }
 
     public static void addUser(ScimUser scimUser) throws Exception {
         RATE_LIMITER.acquire(1);
         Assert.notNull(scimUser, "scimUser can not be null!");
         UserResource user = convertToUserResource(scimUser);
-        Map<String, String> header = new HashMap<>();
-        header.put("Authorization", "Bearer " + ScimKey);
-        OkHttpClientUtils.post(ScimURL + "/Users", header, JsonUtils.toJsonStringDefault(user));
-        // HttpClientUtils.postUrlAndStringBodyWithHeader(ScimURL + "/Users", JsonUtils.toJsonStringDefault(user),
-        // header);
+        OkHttpClientUtils.post(ScimUsersURL, AuthHeader, JsonUtils.toJsonStringDefault(user));
     }
 
     public static void updateUser(ScimUser scimUser) throws Exception {
@@ -97,23 +95,16 @@ public class ScimUserService {
         UserResource user = convertToUserResource(scimUser);
         String id = user.getId();
         // user.setId(null);
-        Map<String, String> header = new HashMap<>();
-        header.put("Authorization", "Bearer " + ScimKey);
-        OkHttpClientUtils.put(ScimURL + "/Users/" + id, header, JsonUtils.toJsonStringDefault(user));
-        // HttpClientUtils.putUrlAndStringBodyWithHeader(ScimURL + "/Users/" + id, JsonUtils.toJsonStringDefault(user),
-        // header);
+        OkHttpClientUtils.put(ScimUsersURL + "/" + id, AuthHeader, JsonUtils.toJsonStringDefault(user));
     }
 
     public static void deleteUser(String id) throws Exception {
         RATE_LIMITER.acquire(1);
         Assert.hasText(id, "id can not be blank!");
-        Map<String, String> header = new HashMap<>();
-        header.put("Authorization", "Bearer " + ScimKey);
-        OkHttpClientUtils.delete(ScimURL + "/Users/" + id, header);
-        // HttpClientUtils.deleteFromUrlWithHeader(ScimURL + "/Users/" + id, header);
+        OkHttpClientUtils.delete(ScimUsersURL + "/" + id, AuthHeader);
     }
 
-    public static List<ScimUser> convertToScimUser(List<UserResource> userResourceList) {
+    public static List<ScimUser> convertToScimUserList(List<UserResource> userResourceList) {
         if (userResourceList == null || userResourceList.isEmpty()) {
             return new ArrayList<>();
         }
@@ -125,7 +116,7 @@ public class ScimUserService {
         return list;
     }
 
-    public static List<UserResource> convertToUserResource(List<ScimUser> scimUserList) {
+    public static List<UserResource> convertToUserResourceList(List<ScimUser> scimUserList) {
         Assert.notEmpty(scimUserList, "scimUserList can not be null!");
         List<UserResource> list = new ArrayList<UserResource>();
         for (ScimUser scimUser : scimUserList) {
@@ -143,8 +134,8 @@ public class ScimUserService {
         scimUser.setUserName(userResource.getUserName());
         scimUser.setDisplayName(userResource.getDisplayName());
         if (userResource.getName() != null) {
-            scimUser.setFirstName(userResource.getName().getGivenName());
-            scimUser.setLastName(userResource.getName().getFamilyName());
+            scimUser.setGivenName(userResource.getName().getGivenName());
+            scimUser.setFamilyName(userResource.getName().getFamilyName());
         }
         if (userResource.getEmails() != null && userResource.getEmails().size() > 0) {
             scimUser.setEmail(userResource.getEmails().get(0).getValue());
@@ -158,7 +149,7 @@ public class ScimUserService {
         user.setId(scimUser.getId());
         user.setExternalId(scimUser.getExternalId());
         user.setUserName(scimUser.getUserName());
-        user.setName(new UserResourceName(scimUser.getFirstName(), scimUser.getLastName()));
+        user.setName(new UserResourceName(scimUser.getFamilyName(), scimUser.getGivenName()));
         user.setActive(true);
         user.setDisplayName(scimUser.getDisplayName());
         UserResourceEmail email = new UserResourceEmail();// Email().setType("work").setPrimary(true).setValue(scimUser.getEmail());

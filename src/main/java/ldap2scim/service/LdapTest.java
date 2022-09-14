@@ -1,4 +1,4 @@
-package ldap2cloudsso.service;
+package ldap2scim.service;
 
 import java.util.Hashtable;
 
@@ -10,7 +10,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import ldap2cloudsso.common.CommonConstants;
+import ldap2scim.common.CommonConstants;
 
 /**
  * ldap test

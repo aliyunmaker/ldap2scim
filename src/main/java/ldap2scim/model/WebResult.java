@@ -5,7 +5,7 @@
  * use it only in accordance with the terms of the license agreement you entered
  * into with Alibaba.com.
  */
-package ldap2cloudsso.model;
+package ldap2scim.model;
 
 /**
  * @author charles.chengc 2015年6月30日 下午5:29:43
