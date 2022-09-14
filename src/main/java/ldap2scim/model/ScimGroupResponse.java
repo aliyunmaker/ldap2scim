@@ -4,19 +4,19 @@ import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class ScimUserResult {
+public class ScimGroupResponse {
 
     @JSONField(name = "Resources")
-    private List<UserResource> resources;
+    private List<ScimGroup> resources;
     private int itemsPerPage;
     private int startIndex;
     private int totalResults;
 
-    public List<UserResource> getResources() {
+    public List<ScimGroup> getResources() {
         return resources;
     }
 
-    public void setResources(List<UserResource> resources) {
+    public void setResources(List<ScimGroup> resources) {
         this.resources = resources;
     }
 

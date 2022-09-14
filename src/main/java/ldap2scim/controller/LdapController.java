@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,9 +27,6 @@ import ldap2scim.utils.JsonUtils;
 @RequestMapping("/ldap")
 public class LdapController extends BaseController {
 
-    @Autowired
-    private LdapService ldapService;
-
     private Logger logger = LoggerFactory.getLogger(LdapController.class);
 
     @RequestMapping("/searchLdapUser.do")
@@ -40,7 +36,7 @@ public class LdapController extends BaseController {
             String ldapbase = request.getParameter("ldapbase");
             String ldapfilter = request.getParameter("ldapfilter");
 
-            List<Map<String, String>> mapList = ldapService.searchLdapUser(ldapbase, ldapfilter);
+            List<Map<String, String>> mapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
             List<Map<String, String>> list = new ArrayList<>();
             for (Map<String, String> map : mapList) {
                 Map<String, String> itemMap = new HashMap<>();
@@ -59,40 +55,44 @@ public class LdapController extends BaseController {
         outputToJSON(response, result);
     }
 
-    @RequestMapping("/syncUser.do")
-    public void syncUser(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping("/syncSearch.do")
+    public void syncSearch(HttpServletRequest request, HttpServletResponse response) {
         WebResult result = new WebResult();
-        // try {
-        // String ldapbase = request.getParameter("ldapbase");
-        // String ldapfilter = request.getParameter("ldapfilter");
-        // // cloudsso
-        // List<ScimUser> cloudssoUserList = ScimUserService.searchScimUser(null, null);
-        // Map<String, ScimUser> cloudssoMap = new HashMap<>();
-        // for (ScimUser scimUser : cloudssoUserList) {
-        // cloudssoMap.put(scimUser.getEmail(), scimUser);
-        // }
-        //
-        // List<ScimUser> list = ldapService.searchLdapUser(ldapbase, ldapfilter);
-        // String emails = request.getParameter("emails");
-        // List<String> emailList = JsonUtils.parseArray(emails, String.class);
-        // for (ScimUser scimUser : list) {
-        // if (emailList.contains(scimUser.getEmail())) {
-        // if (cloudssoMap.get(scimUser.getEmail()) == null) {
-        // ScimUserService.addUser(scimUser);
-        // logger.info("add success,email:" + scimUser.getEmail());
-        // } else {
-        // scimUser.setId(cloudssoMap.get(scimUser.getEmail()).getId());
-        // ScimUserService.updateUser(scimUser);
-        // logger.info("update success,email:" + scimUser.getEmail());
-        // }
-        //
-        // }
-        // }
-        // } catch (Exception e) {
-        // logger.error(e.getMessage(), e);
-        // result.setSuccess(false);
-        // result.setErrorMsg(e.getMessage());
-        // }
+        try {
+            String ldapbase = request.getParameter("ldapbase");
+            String ldapfilter = request.getParameter("ldapfilter");
+            List<Map<String, String>> ldapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
+            LdapService.syncLdaptoScim(ldapList);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            result.setSuccess(false);
+            result.setErrorMsg(e.getMessage());
+        }
+        outputToJSON(response, result);
+    }
+
+    @RequestMapping("/syncChoose.do")
+    public void syncChoose(HttpServletRequest request, HttpServletResponse response) {
+        WebResult result = new WebResult();
+        try {
+            String ldapbase = request.getParameter("ldapbase");
+            String ldapfilter = request.getParameter("ldapfilter");
+            String distinguishedNameArray = request.getParameter("distinguishedNameArray");
+            List<String> distinguishedNameList = JsonUtils.parseArray(distinguishedNameArray, String.class);
+            List<Map<String, String>> ldapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
+
+            List<Map<String, String>> targetList = new ArrayList<>();
+            for (Map<String, String> map : ldapList) {
+                if (distinguishedNameList.contains(map.get("distinguishedName"))) {
+                    targetList.add(map);
+                }
+            }
+            LdapService.syncLdaptoScim(targetList);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            result.setSuccess(false);
+            result.setErrorMsg(e.getMessage());
+        }
         outputToJSON(response, result);
     }
 

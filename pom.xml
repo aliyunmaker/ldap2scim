@@ -96,7 +96,7 @@
 							<goal>repackage</goal>
 						</goals>
 						<configuration>
-							<finalName>ldap2cloudsso</finalName>
+							<finalName>ldap2scim</finalName>
 						</configuration>
 					</execution>
 				</executions>

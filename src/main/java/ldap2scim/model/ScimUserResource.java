@@ -2,15 +2,15 @@ package ldap2scim.model;
 
 import java.util.List;
 
-public class UserResource {
+public class ScimUserResource {
     private String id;
     private String externalId;
     private String userName;
     private Boolean active;
     private String displayName;
-    private List<UserResourceEmail> emails;
+    private List<ScimUserResourceEmail> emails;
     private List<String> schemas;
-    private UserResourceName name;
+    private ScimUserResourceName name;
 
     public String getId() {
         return id;
@@ -52,11 +52,11 @@ public class UserResource {
         this.displayName = displayName;
     }
 
-    public List<UserResourceEmail> getEmails() {
+    public List<ScimUserResourceEmail> getEmails() {
         return emails;
     }
 
-    public void setEmails(List<UserResourceEmail> emails) {
+    public void setEmails(List<ScimUserResourceEmail> emails) {
         this.emails = emails;
     }
 
@@ -68,11 +68,11 @@ public class UserResource {
         this.schemas = schemas;
     }
 
-    public UserResourceName getName() {
+    public ScimUserResourceName getName() {
         return name;
     }
 
-    public void setName(UserResourceName name) {
+    public void setName(ScimUserResourceName name) {
         this.name = name;
     }
 

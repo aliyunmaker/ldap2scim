@@ -2,7 +2,7 @@ package ldap2scim.model;
 
 import java.util.List;
 
-public class GroupResource {
+public class ScimGroup {
     private String id;
     private String externalId;
     private String displayName;
