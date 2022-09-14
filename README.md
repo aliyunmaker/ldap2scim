@@ -1,7 +1,8 @@
 # 配置文件
 
 ```properties
-key_aliyun_cloudsso = cloud_sso_key
+scim_key = scim key
+scim_url = scim server url
 ldap_url = ldap://127.0.0.1:389
 ldap_username = username
 ldap_password = password
@@ -9,12 +10,12 @@ ldap_searchbase = ou=hangzhou,dc=landingzone,dc=cc
 ldap_searchfilter = (objectClass=user)
 
 # 这里是ldap字段和scim字段的对应关系
-ldap_attr_firstname = givenName
-ldap_attr_lastname = sn
-ldap_attr_email = userPrincipalName
-ldap_attr_externalid = sAMAccountName
-ldap_attr_displayname = userPrincipalName
-ldap_attr_username = userPrincipalName
+scim_attr_givenname = givenName
+scim_attr_familyname = sn
+scim_attr_email = userPrincipalName
+scim_attr_externalid = distinguishedName
+scim_attr_displayname = sAMAccountName
+scim_attr_username = sAMAccountName
 ```
 
 #### 读取顺序
@@ -22,7 +23,7 @@ ldap_attr_username = userPrincipalName
 - ldap2cloudsso.jar同目录下的ldap2cloudsso.properties
 - 用户home/config/目录下的ldap2cloudsso.properties
 
-#### key_aliyun_cloudsso
+#### scim_key&scim_url
 
 ![screenshot1](image/cloudsso_key.png)
 

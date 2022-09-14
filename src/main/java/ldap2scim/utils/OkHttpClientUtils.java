@@ -69,6 +69,13 @@ public class OkHttpClientUtils {
         return result;
     }
 
+    public static String patch(String url, Map<String, String> headerMap, String jsonBody)
+        throws Exception {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(url).newBuilder();
+        String result = excute(httpUrl.build(), HttpMethod.PATCH, headerMap, jsonBody);
+        return result;
+    }
+
     public static String excute(HttpUrl httpUrl, HttpMethod method, Map<String, String> headerMap, String body)
         throws Exception {
         Headers.Builder headers = new Headers.Builder();

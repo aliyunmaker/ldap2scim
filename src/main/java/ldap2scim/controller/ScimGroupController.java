@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ldap2scim.model.GroupResource;
+import ldap2scim.model.ScimGroup;
 import ldap2scim.model.Page;
 import ldap2scim.model.WebResult;
 import ldap2scim.service.ScimGroupService;
@@ -31,7 +31,7 @@ public class ScimGroupController extends BaseController {
             Integer limit = Integer.valueOf(request.getParameter("limit"));
             Integer pageNum = Integer.valueOf(request.getParameter("page"));
             Page page = new Page(start, limit, pageNum);
-            List<GroupResource> list = ScimGroupService.searchScimGroup(simpleSearch, page);
+            List<ScimGroup> list = ScimGroupService.searchScimGroup(simpleSearch, page);
             result.setTotal(page.getTotal());
             result.setData(list);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class ScimGroupController extends BaseController {
         WebResult result = new WebResult();
         try {
             String formString = request.getParameter("formString");
-            GroupResource scimGroup = JsonUtils.parseObject(formString, GroupResource.class);
+            ScimGroup scimGroup = JsonUtils.parseObject(formString, ScimGroup.class);
             ScimGroupService.addGroup(scimGroup);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -62,7 +62,7 @@ public class ScimGroupController extends BaseController {
         WebResult result = new WebResult();
         try {
             String formString = request.getParameter("formString");
-            GroupResource scimGroup = JsonUtils.parseObject(formString, GroupResource.class);
+            ScimGroup scimGroup = JsonUtils.parseObject(formString, ScimGroup.class);
             ScimGroupService.updateGroup(scimGroup);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

@@ -79,20 +79,34 @@ Ext.onReady(function () {
       flex: 1
     }],
     tbar: [{
-      text: '同步到cloudsso',
+      text: '选择并同步到SCIM',
       iconCls: 'MyExt-refresh',
       handler: function () {
         var select = MyExt.util.SelectGridModel(userGrid, false);
         if (!select) {
           return;
         }
-        let emailArray = new Array();
+        let distinguishedNameArray = new Array();
         for (let i = 0; i < select.length; i++) {
-          emailArray[i] = select[i].data["email"];
+          distinguishedNameArray[i] = select[i].data["distinguishedName"];
         }
         MyExt.util.MessageConfirm('是否确定同步', function () {
-          MyExt.util.Ajax('../ldap/syncUser.do', {
-            emails: Ext.JSON.encode(emailArray),
+          MyExt.util.Ajax('../ldap/syncChoose.do', {
+            distinguishedNameArray: Ext.JSON.encode(distinguishedNameArray),
+            ldapbase: searchForm.getForm().getValues()["ldapbase"],
+            ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
+          }, function (data) {
+            reload();
+            MyExt.Msg.alert('同步成功!');
+          });
+        });
+      }
+    }, {
+      text: '查询并同步到SCIM',
+      iconCls: 'MyExt-refresh',
+      handler: function () {
+        MyExt.util.MessageConfirm('是否确定同步所有查询结果', function () {
+          MyExt.util.Ajax('../ldap/syncSearch.do', {
             ldapbase: searchForm.getForm().getValues()["ldapbase"],
             ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
           }, function (data) {
