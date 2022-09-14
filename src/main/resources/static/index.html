@@ -1,13 +1,20 @@
 <html>
+
 <head>
-    <title>LADP2Cloudsso</title>
+    <title>LADP2SCIM</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css"	href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/extjs/4.1/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css"	href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/css/common.css" />
-    <link rel="stylesheet" type="text/css"  href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/css/font-awesome/css/font-awesome.min.css" />
-    <script type="text/javascript" src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/extjs/4.1/ext-all.js"></script>
-    <script type="text/javascript" src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/jslib/utilsv4.js"></script>
-    <script type="text/javascript" src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/jslib/myComponent.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/extjs/4.1/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/css/common.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/css/font-awesome/css/font-awesome.min.css" />
+    <script type="text/javascript"
+        src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/extjs/4.1/ext-all.js"></script>
+    <script type="text/javascript"
+        src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/jslib/utilsv4.js"></script>
+    <script type="text/javascript"
+        src="https://dream-web.oss-cn-hangzhou.aliyuncs.com/static/jslib/myComponent.js"></script>
     <script th:inline="javascript">
         Ext
             .onReady(function () {
@@ -23,15 +30,26 @@
                                 expanded: true,
                                 children: [
                                     {
-                                        text: "CloudSSO查询",
+                                        text: "SCIM用户",
                                         leaf: true,
                                         href: 'scim/scimUser.html',
+                                        hrefTarget: 'mainFrame'
+                                    }, {
+                                        text: "SCIM用户组",
+                                        leaf: true,
+                                        href: 'scim/scimGroup.html',
                                         hrefTarget: 'mainFrame'
                                     },
                                     {
                                         text: "LDAP查询",
                                         leaf: true,
                                         href: 'ldap/ldap.html',
+                                        hrefTarget: 'mainFrame'
+                                    },
+                                    {
+                                        text: "LDAP同步",
+                                        leaf: true,
+                                        href: 'ldap/ldapSync.html',
                                         hrefTarget: 'mainFrame'
                                     }
                                 ]
@@ -89,7 +107,9 @@
             });
     </script>
 </head>
+
 <body>
-<div align="left"></div>
+    <div align="left"></div>
 </body>
+
 </html>

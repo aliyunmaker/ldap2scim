@@ -1,4 +1,4 @@
-package ldap2cloudsso.model;
+package ldap2scim.model;
 
 import java.util.List;
 

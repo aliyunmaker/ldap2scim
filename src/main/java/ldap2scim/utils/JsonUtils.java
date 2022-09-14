@@ -1,4 +1,4 @@
-package ldap2cloudsso.utils;
+package ldap2scim.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

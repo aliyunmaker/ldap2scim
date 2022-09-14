@@ -1,11 +1,11 @@
-package ldap2cloudsso.controller;
+package ldap2scim.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletResponse;
+import ldap2scim.utils.JsonUtils;
 
-import ldap2cloudsso.utils.JsonUtils;
+import javax.servlet.http.HttpServletResponse;
 
 public class BaseController {
 

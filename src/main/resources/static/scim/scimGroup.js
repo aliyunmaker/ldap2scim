@@ -6,10 +6,10 @@ Ext.onReady(function () {
   };
 
   var userStore = Ext.create('MyExt.Component.SimpleJsonStore', {
-    dataUrl: '../scimUser/searchScimUser.do',
+    dataUrl: '../scimGroup/searchScimGroup.do',
     rootFlag: 'data',
     pageSize: 200,
-    fields: ['id', 'externalId', 'userName', 'displayName', 'givenName', 'familyName', 'email']
+    fields: ['id', 'externalId', 'displayName']
   });
 
   userStore.on('beforeload', function (store, options) {
@@ -48,45 +48,26 @@ Ext.onReady(function () {
 
   var userGrid = Ext.create('MyExt.Component.GridPanel', {
     region: 'center',
-    title: '用户列表',
-    // hasInfoBbar: true,
-    // hasBbar: false,
+    title: '用户组列表',
     store: userStore,
     columns: [{
       dataIndex: 'id',
       header: 'ID',
       width: 160
     }, {
-      dataIndex: 'userName',
-      header: "用户名",
-      width: 200
-    }, {
       dataIndex: 'displayName',
       header: "显示名",
-      width: 150
+      width: 200
     }, {
-      dataIndex: 'familyName',
-      header: "familyName",
-      width: 150
-    }, {
-      dataIndex: 'givenName',
-      header: "givenName",
-      width: 150
-    }
-      , {
       dataIndex: 'externalId',
       header: 'externalId',
-      width: 120
-    }, {
-      dataIndex: 'email',
-      header: "邮箱",
       flex: 1
     }],
     tbar: [{
       text: '增加',
       iconCls: 'MyExt-add',
       handler: function () {
-        formWindow.changeFormUrlAndShow('../scimUser/addUser.do');
+        formWindow.changeFormUrlAndShow('../scimGroup/addGroup.do');
       }
     }, {
       text: '修改',
@@ -96,7 +77,7 @@ Ext.onReady(function () {
         if (!select) {
           return;
         }
-        formWindow.changeFormUrlAndShow('../scimUser/updateUser.do');
+        formWindow.changeFormUrlAndShow('../scimGroup/updateGroup.do');
         formWindow.getFormPanel().getForm().loadRecord(select[0]);
       }
     }, {
@@ -107,16 +88,12 @@ Ext.onReady(function () {
         if (!select) {
           return;
         }
-        // if (select.length > 50) {
-        //   MyExt.Msg.alert('一次删除不能超过50');
-        //   return;
-        // }
         let idArray = new Array();
         for (let i = 0; i < select.length; i++) {
           idArray[i] = select[i].data["id"];
         }
         MyExt.util.MessageConfirm('选中:' + select.length + ' ,是否确定删除', function () {
-          MyExt.util.Ajax('../scimUser/deleteUser.do', {
+          MyExt.util.Ajax('../scimGroup/deleteGroup.do', {
             idArray: Ext.JSON.encode(idArray),
           }, function (data) {
             reload();
@@ -131,29 +108,13 @@ Ext.onReady(function () {
   var formWindow = new MyExt.Component.FormWindow({
     title: '操作',
     width: 400,
-    height: 250,
+    height: 200,
     formItems: [{
       name: 'id',
       hidden: true
     }, {
-      fieldLabel: '用户名(*)',
-      name: 'userName',
-      allowBlank: false
-    }, {
       fieldLabel: '显示名(*)',
       name: 'displayName',
-      allowBlank: false
-    }, {
-      fieldLabel: '邮箱(*)',
-      name: 'email',
-      allowBlank: false
-    }, {
-      fieldLabel: 'givenName(*)',
-      name: 'givenName',
-      allowBlank: false
-    }, {
-      fieldLabel: 'familyName(*)',
-      name: 'familyName',
       allowBlank: false
     }, {
       fieldLabel: 'externalId(*)',

@@ -1,6 +1,5 @@
-package ldap2cloudsso.controller;
+package ldap2scim.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import ldap2cloudsso.model.ScimUser;
-import ldap2cloudsso.model.WebResult;
-import ldap2cloudsso.service.ScimUserService;
-import ldap2cloudsso.utils.JsonUtils;
+import ldap2scim.model.Page;
+import ldap2scim.model.ScimUser;
+import ldap2scim.model.WebResult;
+import ldap2scim.service.ScimUserService;
+import ldap2scim.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/scimUser")
@@ -27,9 +27,13 @@ public class ScimUserController extends BaseController {
             if (StringUtils.isBlank(simpleSearch)) {
                 simpleSearch = null;
             }
-            List<ScimUser> list = ScimUserService.searchScimUser(simpleSearch);
-            Collections.sort(list);
-            result.setTotal(list.size());
+            Integer start = Integer.valueOf(request.getParameter("start"));
+            Integer limit = Integer.valueOf(request.getParameter("limit"));
+            Integer pageNum = Integer.valueOf(request.getParameter("page"));
+            Page page = new Page(start, limit, pageNum);
+            List<ScimUser> list = ScimUserService.searchScimUser(simpleSearch, page);
+            // Collections.sort(list);
+            result.setTotal(page.getTotal());
             result.setData(list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -45,10 +49,6 @@ public class ScimUserController extends BaseController {
         try {
             String formString = request.getParameter("formString");
             ScimUser scimUser = JsonUtils.parseObject(formString, ScimUser.class);
-
-            scimUser.setEmail(scimUser.getUserName());
-            scimUser.setDisplayName(scimUser.getFirstName() + " " + scimUser.getLastName());
-
             ScimUserService.addUser(scimUser);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -64,10 +64,6 @@ public class ScimUserController extends BaseController {
         try {
             String formString = request.getParameter("formString");
             ScimUser scimUser = JsonUtils.parseObject(formString, ScimUser.class);
-
-            scimUser.setEmail(scimUser.getUserName());
-            scimUser.setDisplayName(scimUser.getFirstName() + " " + scimUser.getLastName());
-
             ScimUserService.updateUser(scimUser);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
