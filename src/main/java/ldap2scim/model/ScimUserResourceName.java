@@ -1,6 +1,6 @@
 package ldap2scim.model;
 
-public class UserResourceName {
+public class ScimUserResourceName {
 
     private String familyName;
     private String givenName;
@@ -9,7 +9,7 @@ public class UserResourceName {
         return familyName;
     }
 
-    public UserResourceName(String familyName, String givenName) {
+    public ScimUserResourceName(String familyName, String givenName) {
         super();
         this.familyName = familyName;
         this.givenName = givenName;

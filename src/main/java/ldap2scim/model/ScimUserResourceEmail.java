@@ -1,6 +1,6 @@
 package ldap2scim.model;
 
-public class UserResourceEmail {
+public class ScimUserResourceEmail {
 
     private boolean primary;
     private String type;
