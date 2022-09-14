@@ -1,13 +1,19 @@
-package ldap2cloudsso.model;
+package ldap2scim.model;
 
+/**
+ * 简化SCIM中的userresource,将name,emails扁平化
+ * 
+ * @author charles
+ *
+ */
 public class ScimUser implements Comparable<ScimUser> {
 
     private String id;
     private String externalId;
     private String userName;
     private String displayName;
-    private String firstName;
-    private String lastName;
+    private String givenName;
+    private String familyName;
     private String email;
 
     @Override
@@ -53,20 +59,20 @@ public class ScimUser implements Comparable<ScimUser> {
         this.displayName = displayName;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFamilyName() {
+        return familyName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getGivenName() {
+        return givenName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
     }
 
     public String getEmail() {

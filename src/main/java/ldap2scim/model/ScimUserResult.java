@@ -1,10 +1,10 @@
-package ldap2cloudsso.model;
+package ldap2scim.model;
 
 import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class ScimResult {
+public class ScimUserResult {
 
     @JSONField(name = "Resources")
     private List<UserResource> resources;
