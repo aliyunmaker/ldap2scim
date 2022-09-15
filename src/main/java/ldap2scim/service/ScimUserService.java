@@ -32,7 +32,7 @@ public class ScimUserService {
 
     // private static Logger logger = LoggerFactory.getLogger(ScimUserService.class);
 
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
+    public static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
 
     public static void main(String[] args) throws Exception {
         ScimUser scimUser = new ScimUser();
@@ -59,6 +59,7 @@ public class ScimUserService {
     }
 
     public static List<ScimUser> searchScimUser(String filter, Page page) throws Exception {
+        RATE_LIMITER.acquire(1);
         Map<String, String> params = new HashMap<>();
         if (null != page) {
             // FIXME 服务端有bug待修复,startIndex先当做page使用

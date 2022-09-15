@@ -30,7 +30,7 @@ Ext.onReady(function () {
     columns: [{
       dataIndex: 'uuid',
       header: "uuid",
-      width: 160
+      width: 250
     }, {
       dataIndex: 'executeTime',
       header: "执行时间",
@@ -51,6 +51,6 @@ Ext.onReady(function () {
     info_panel.body.update(data.data);
   });
 
-  //reload();
+  reload();
 
 })
