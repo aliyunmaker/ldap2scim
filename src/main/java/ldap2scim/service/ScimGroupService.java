@@ -57,6 +57,26 @@ public class ScimGroupService {
         return list;
     }
 
+    public static List<ScimGroup> getAllScimGroup() throws Exception {
+        List<ScimGroup> result = new ArrayList<>();
+        int numPerPage = 100;
+        int pageNum = 1;
+        int start = 0;
+        Page page = new Page(start, numPerPage, pageNum);
+        while (true) {
+            List<ScimGroup> pageResult = searchScimGroup(null, page);
+            result.addAll(pageResult);
+            pageNum++;
+            start += numPerPage;
+            page.setStart(start);
+            page.setPage(pageNum);
+            if (start > page.getTotal()) {
+                break;
+            }
+        }
+        return result;
+    }
+
     public static String addGroup(ScimGroup scimGroup) throws Exception {
         ScimUserService.RATE_LIMITER.acquire(1);
         Assert.notNull(scimGroup, "scimGroup can not be null!");
