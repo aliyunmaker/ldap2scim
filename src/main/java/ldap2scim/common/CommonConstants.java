@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,8 +15,11 @@ public class CommonConstants {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonConstants.class);
 
+    public static final DateTimeFormatter DateTimeformatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public static final String SCIM_KEY;
     public static final String SCIM_URL;
+
     public static final String LDAP_URL;
     public static final String LDAP_UserName;
     public static final String LDAP_Password;
@@ -28,6 +32,11 @@ public class CommonConstants {
     public static final String SCIM_ATTR_EXTERNALID;
     public static final String SCIM_ATTR_DISPLAYNAME;
     public static final String SCIM_ATTR_USERNAME;
+
+    public static final String SCIM_SYNC_CRON_EXPRESSION;
+    public static final boolean SCIM_SYNC_CRON_ENABLED;
+    public static final boolean SCIM_SYNC_GROUP_ENABLED;
+    public static final boolean SCIM_SYNC_GROUP_MEMBER_ENABLED;
 
     public static final String CONFIG_FILE_NAME = File.separator + "ldap2cloudsso.properties";
 
@@ -46,9 +55,14 @@ public class CommonConstants {
         SCIM_ATTR_EXTERNALID = properties.getProperty("scim_attr_externalid");
         SCIM_ATTR_DISPLAYNAME = properties.getProperty("scim_attr_displayname");
         SCIM_ATTR_USERNAME = properties.getProperty("scim_attr_username");
+        SCIM_SYNC_CRON_EXPRESSION = properties.getProperty("scim_sync_cron_expression");
+        SCIM_SYNC_CRON_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_cron_enabled"));
+        SCIM_SYNC_GROUP_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_group_enabled"));
+        SCIM_SYNC_GROUP_MEMBER_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_group_member_enabled"));
         logger.info("============================CONFIG=========================");
         logger.info("SCIM_URL:" + SCIM_URL);
         logger.info("SCIM_KEY:" + SCIM_KEY);
+        logger.info("-----------------------------------------------------------");
         logger.info("LDAP_URL:" + LDAP_URL);
         logger.info("LDAP_UserName:" + LDAP_UserName);
         logger.info("LDAP_Password:" + LDAP_Password);
@@ -61,6 +75,11 @@ public class CommonConstants {
         logger.info("SCIM_ATTR_EXTERNALID:" + SCIM_ATTR_EXTERNALID);
         logger.info("SCIM_ATTR_DISPLAYNAME:" + SCIM_ATTR_DISPLAYNAME);
         logger.info("SCIM_ATTR_USERNAME:" + SCIM_ATTR_USERNAME);
+        logger.info("-----------------------------------------------------------");
+        logger.info("SCIM_SYNC_CRON_EXPRESSION:" + SCIM_SYNC_CRON_EXPRESSION);
+        logger.info("SCIM_SYNC_CRON_ENABLED:" + SCIM_SYNC_CRON_ENABLED);
+        logger.info("SCIM_SYNC_GROUP_ENABLED:" + SCIM_SYNC_GROUP_ENABLED);
+        logger.info("SCIM_SYNC_GROUP_MEMBER_ENABLED:" + SCIM_SYNC_GROUP_MEMBER_ENABLED);
         logger.info("============================================================");
     }
 
