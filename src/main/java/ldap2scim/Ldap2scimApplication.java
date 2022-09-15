@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
-@ServletComponentScan("ldap2cloudsso")
+@ServletComponentScan("ldap2scim")
 
 public class Ldap2scimApplication {
 
