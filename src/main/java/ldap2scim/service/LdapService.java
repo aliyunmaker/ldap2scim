@@ -105,7 +105,7 @@ public class LdapService {
     }
 
     public static String syncLdaptoScim(List<Map<String, String>> list) {
-        TaskTraceId.set("task" + System.currentTimeMillis());
+        TaskTraceId.set("task_" + System.currentTimeMillis());
         int userCount = 0;
         int groupCount = 0;
         Map<String, String> groupMemberMap = new HashMap<>();
@@ -153,11 +153,13 @@ public class LdapService {
             logger.error(e.getMessage(), e);
         }
 
-        logger.info("[{}][syncLdaptoScim] total:{},userCount:{},groupCount:{}", TaskTraceId.get(), list.size(),
-            userCount, groupCount);
+        String result = "[" + TaskTraceId.get() + "][syncLdaptoScim] total:" + list.size() + ",userCount:" + userCount
+            + ",groupCount:" + groupCount;
+
+        logger.info(result);
         TaskTraceId.remove();
 
-        return "";
+        return result;
     }
 
     public static Map<String, List<String>> mergeGroupMemberMap(Map<String, String> groupMemberMap,
