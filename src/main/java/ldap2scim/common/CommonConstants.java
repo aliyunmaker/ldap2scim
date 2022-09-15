@@ -38,7 +38,7 @@ public class CommonConstants {
     public static final boolean SCIM_SYNC_GROUP_ENABLED;
     public static final boolean SCIM_SYNC_GROUP_MEMBER_ENABLED;
 
-    public static final String CONFIG_FILE_NAME = File.separator + "ldap2cloudsso.properties";
+    public static final String CONFIG_FILE_NAME = File.separator + "ldap2scim.properties";
 
     static {
         Properties properties = loadProperties();

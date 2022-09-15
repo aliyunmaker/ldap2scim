@@ -3,6 +3,7 @@
 ```properties
 scim_key = scim key
 scim_url = scim server url
+
 ldap_url = ldap://127.0.0.1:389
 ldap_username = username
 ldap_password = password
@@ -16,12 +17,17 @@ scim_attr_email = userPrincipalName
 scim_attr_externalid = distinguishedName
 scim_attr_displayname = sAMAccountName
 scim_attr_username = sAMAccountName
+
+scim_sync_cron_enabled = true
+scim_sync_cron_expression = 0 0 0/1 * * *
+scim_sync_group_enabled = true
+scim_sync_group_member_enabled = true
 ```
 
 #### 读取顺序
-- 运行时参数,示例: java -jar -DconfigPath=/home/test/ldap2cloudsso.properties ldap2cloudsso.jar  
-- ldap2cloudsso.jar同目录下的ldap2cloudsso.properties
-- 用户home/config/目录下的ldap2cloudsso.properties
+- 运行时参数,示例: java -jar -DconfigPath=/home/test/ldap2scim.properties ldap2scim.jar  
+- ldap2scim.jar同目录下的ldap2scim.properties
+- 用户home/config/目录下的ldap2scim.properties
 
 #### scim_key&scim_url
 
@@ -30,9 +36,9 @@ scim_attr_username = sAMAccountName
 
 
 # 启动(springboot)
-代码启动: main class: `ldap2cloudsso.Ldap2cloudssoApplication`
+代码启动: main class: `ldap2scim.Ldap2scimApplication`
 
-jar包启动: java -jar ldap2cloudsso.jar
+jar包启动: java -jar ldap2scim.jar
 
 
 
