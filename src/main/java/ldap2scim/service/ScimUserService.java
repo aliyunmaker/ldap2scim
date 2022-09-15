@@ -34,7 +34,7 @@ public class ScimUserService {
 
     public static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
 
-    public static void main(String[] args) throws Exception {
+    public static void main1(String[] args) throws Exception {
         ScimUser scimUser = new ScimUser();
         scimUser.setGivenName("二");
         scimUser.setFamilyName("程");
@@ -79,6 +79,31 @@ public class ScimUserService {
         // logger.info("==================================");
         // logger.info(String.valueOf(list.size()));
         return convertToScimUserList(list);
+    }
+
+    public static void main(String[] args) throws Exception {
+        List<ScimUser> list = getAllScimUser();
+        System.out.println(list.size());
+    }
+
+    public static List<ScimUser> getAllScimUser() throws Exception {
+        List<ScimUser> result = new ArrayList<>();
+        int numPerPage = 100;
+        int pageNum = 1;
+        int start = 0;
+        Page page = new Page(start, numPerPage, pageNum);
+        while (true) {
+            List<ScimUser> pageResult = searchScimUser(null, page);
+            result.addAll(pageResult);
+            pageNum++;
+            start += numPerPage;
+            page.setStart(start);
+            page.setPage(pageNum);
+            if (start > page.getTotal()) {
+                break;
+            }
+        }
+        return result;
     }
 
     public static String addUser(ScimUser scimUser) throws Exception {

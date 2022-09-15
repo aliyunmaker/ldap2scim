@@ -1,12 +1,30 @@
 package ldap2scim.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ScimGroup {
     private String id;
     private String externalId;
     private String displayName;
     private List<String> schemas;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(displayName, externalId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ScimGroup other = (ScimGroup)obj;
+        return Objects.equals(displayName, other.displayName) && Objects.equals(externalId, other.externalId);
+    }
 
     public String getId() {
         return id;

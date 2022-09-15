@@ -1,5 +1,7 @@
 package ldap2scim.model;
 
+import java.util.Objects;
+
 /**
  * 简化SCIM中的userresource,将name,emails扁平化
  * 
@@ -25,6 +27,25 @@ public class ScimUser implements Comparable<ScimUser> {
             return -1;
         }
         return id.compareTo(o.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(displayName, email, externalId, familyName, givenName, userName);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ScimUser other = (ScimUser)obj;
+        return Objects.equals(displayName, other.displayName) && Objects.equals(email, other.email)
+            && Objects.equals(externalId, other.externalId) && Objects.equals(familyName, other.familyName)
+            && Objects.equals(givenName, other.givenName) && Objects.equals(userName, other.userName);
     }
 
     public String getId() {
