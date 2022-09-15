@@ -51,19 +51,24 @@ public class Ldap2ScimTask implements CommandLineRunner {
 
                 @Override
                 public void run() {
-                    TaskRecord taskRecord = new TaskRecord();
-                    String uuid = UUIDUtils.generateUUID();
-                    taskRecord.setUuid(uuid);
-                    taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
-                    logger.info("[task][{}] scim sync start!", uuid);
-                    List<Map<String, String>> ldapList =
-                        LdapService.searchLdapUser(CommonConstants.LDAP_Searchbase, CommonConstants.LDAP_Searchfilter);
-                    String result = LdapService.syncLdaptoScim(ldapList);
-                    logger.info("[task][{}] scim sync end!", uuid);
-                    taskRecord.setResult(result);
-                    taskRecords.add(taskRecord);
-                    if (taskRecords.size() >= 200) {
-                        taskRecords.remove(0);
+                    try {
+                        TaskRecord taskRecord = new TaskRecord();
+                        String uuid = UUIDUtils.generateUUID();
+                        taskRecord.setUuid(uuid);
+                        taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
+                        logger.info("[task][{}] scim sync start!", uuid);
+                        List<Map<String, String>> ldapList =
+                            LdapService.searchLdapUser(CommonConstants.LDAP_Searchbase,
+                                CommonConstants.LDAP_Searchfilter);
+                        String result = LdapService.syncLdaptoScim(ldapList);
+                        logger.info("[task][{}] scim sync end!", uuid);
+                        taskRecord.setResult(result);
+                        taskRecords.add(taskRecord);
+                        if (taskRecords.size() >= 200) {
+                            taskRecords.remove(0);
+                        }
+                    } catch (Exception e) {
+                        logger.error(e.getMessage(), e);
                     }
                 }
             }, new CronTrigger(CommonConstants.SCIM_SYNC_CRON_EXPRESSION));
