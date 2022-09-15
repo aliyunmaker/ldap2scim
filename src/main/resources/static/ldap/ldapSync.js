@@ -2,112 +2,55 @@ Ext.onReady(function () {
   // Ext.tip.QuickTipManager.init();
 
   var reload = function () {
-    userStore.load();
+    taskStore.load();
   };
 
-  var userStore = Ext.create('MyExt.Component.SimpleJsonStore', {
-    dataUrl: '../ldap/searchLdapUser.do',
+  var info_panel = Ext.create('Ext.panel.Panel', {
+    region: "north",
+    height: 100,
+    frame: false,
+    border: false,
+    bodyStyle: 'background:rgb(223,233,246)',
+    html: 'loading...'
+  });
+
+  var taskStore = Ext.create('MyExt.Component.SimpleJsonStore', {
+    dataUrl: '../ldap/getTaskRecords.do',
     rootFlag: 'data',
     pageSize: 200,
-    fields: ['objectClass', 'distinguishedName', 'jsonString']
+    fields: ['uuid', 'executeTime', 'result']
   });
 
-  userStore.on('beforeload', function (store, options) {
-    options.params = Ext.apply(options.params || {}, searchForm.getForm().getValues());
-  });
-
-  var searchForm = Ext.create('Ext.form.Panel', {
-    region: 'north',
-    frame: true,
-    height: 100,
-    bodyStyle: 'padding:15px 0px 0px 10px',
-    fieldDefaults: {
-      labelWidth: 80
-    },
-    defaults: {
-      width: 300
-    },
-    defaultType: 'textfield',
-    buttonAlign: 'left',
-    items: [{
-      fieldLabel: 'LDAP filter',
-      width: 600,
-      emptyText: '(objectClass=user)',
-      name: 'ldapfilter',
-      enableKeyEvents: true,
-      listeners: {
-        keypress: function (thiz, e) {
-          if (e.getKey() == Ext.EventObject.ENTER) {
-            userGrid.getPageToolbar().moveFirst();
-          }
-        }
-      }
-    }, {
-      fieldLabel: 'LDAP base',
-      width: 600,
-      emptyText: 'ou=hangzhou,dc=test,dc=com',
-      name: 'ldapbase',
-      enableKeyEvents: true,
-      listeners: {
-        keypress: function (thiz, e) {
-          if (e.getKey() == Ext.EventObject.ENTER) {
-            userGrid.getPageToolbar().moveFirst();
-          }
-        }
-      }
-    }]
-  });
-
-
-  var userGrid = Ext.create('MyExt.Component.GridPanel', {
+  var taskGrid = Ext.create('MyExt.Component.GridPanel', {
     region: 'center',
-    title: 'LDAP列表',
+    title: '任务执行列表',
     hasInfoBbar: true,
     hasBbar: false,
-    store: userStore,
+    store: taskStore,
     columns: [{
-      dataIndex: 'objectClass',
-      header: "objectClass",
-      width: 80
+      dataIndex: 'uuid',
+      header: "uuid",
+      width: 160
     }, {
-      dataIndex: 'distinguishedName',
-      header: "DN",
-      width: 300
+      dataIndex: 'executeTime',
+      header: "执行时间",
+      width: 160
     }, {
-      dataIndex: 'jsonString',
-      header: "json",
+      dataIndex: 'result',
+      header: "执行结果",
       flex: 1
-    }],
-    tbar: [{
-      text: '同步到cloudsso',
-      iconCls: 'MyExt-refresh',
-      handler: function () {
-        var select = MyExt.util.SelectGridModel(userGrid, false);
-        if (!select) {
-          return;
-        }
-        let emailArray = new Array();
-        for (let i = 0; i < select.length; i++) {
-          emailArray[i] = select[i].data["email"];
-        }
-        MyExt.util.MessageConfirm('是否确定同步', function () {
-          MyExt.util.Ajax('../ldap/syncUser.do', {
-            emails: Ext.JSON.encode(emailArray),
-            ldapbase: searchForm.getForm().getValues()["ldapbase"],
-            ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
-          }, function (data) {
-            reload();
-            MyExt.Msg.alert('同步成功!');
-          });
-        });
-      }
     }]
   });
 
   Ext.create('Ext.container.Viewport', {
     layout: 'border',
-    items: [searchForm, userGrid]
+    items: [info_panel, taskGrid]
   });
-  reload();
+
+  MyExt.util.Ajax("../ldap/getTaskInfo.do", null, function (data) {
+    info_panel.body.update(data.data);
+  });
+
+  //reload();
 
 })

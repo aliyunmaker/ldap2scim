@@ -122,6 +122,10 @@ Ext.onReady(function () {
     layout: 'border',
     items: [searchForm, userGrid]
   });
-  reload();
+
+  MyExt.util.Ajax('../ldap/getSearchParams.do', null, function (data) {
+    searchForm.getForm().setValues(data.data);
+    reload();
+  });
 
 })
