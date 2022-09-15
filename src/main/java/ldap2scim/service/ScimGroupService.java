@@ -35,6 +35,7 @@ public class ScimGroupService {
     }
 
     public static List<ScimGroup> searchScimGroup(String filter, Page page) throws Exception {
+        ScimUserService.RATE_LIMITER.acquire(1);
         Map<String, String> params = new HashMap<>();
         if (null != page) {
             // FIXME 服务端有bug待修复,startIndex先当做page使用
@@ -57,6 +58,7 @@ public class ScimGroupService {
     }
 
     public static String addGroup(ScimGroup scimGroup) throws Exception {
+        ScimUserService.RATE_LIMITER.acquire(1);
         Assert.notNull(scimGroup, "scimGroup can not be null!");
         scimGroup.setSchemas(List.of("urn:ietf:params:scim:schemas:core:2.0:Group"));
         String result = OkHttpClientUtils.post(ScimGroupsURL, AuthHeader, JsonUtils.toJsonStringDefault(scimGroup));
@@ -65,6 +67,7 @@ public class ScimGroupService {
     }
 
     public static void updateGroup(ScimGroup scimGroup) throws Exception {
+        ScimUserService.RATE_LIMITER.acquire(1);
         Assert.notNull(scimGroup, "scimGroup can not be null!");
         Assert.hasText(scimGroup.getId(), "id can not be blank!");
         String id = scimGroup.getId();
@@ -75,11 +78,13 @@ public class ScimGroupService {
     }
 
     public static void deleteGroup(String id) throws Exception {
+        ScimUserService.RATE_LIMITER.acquire(1);
         Assert.hasText(id, "id can not be blank!");
         OkHttpClientUtils.delete(ScimGroupsURL + "/" + id, AuthHeader);
     }
 
     public static void removeAllMembersByGroupId(String groupId) throws Exception {
+        ScimUserService.RATE_LIMITER.acquire(1);
         Assert.hasText(groupId, "groupId can not be blank!");
         String jsonBody =
             "{\"schemas\": [\"urn:ietf:params:scim:api:messages:2.0:PatchOp\"],\"Operations\": [{\"op\": \"remove\",\"path\": \"members\"}]}";
@@ -87,6 +92,7 @@ public class ScimGroupService {
     }
 
     public static void addMembersByGroupId(String groupId, List<String> userIdList) throws Exception {
+        ScimUserService.RATE_LIMITER.acquire(1);
         Assert.hasText(groupId, "groupId can not be blank!");
         List<Map<String, String>> mapList = new ArrayList<>();
         for (String userId : userIdList) {
