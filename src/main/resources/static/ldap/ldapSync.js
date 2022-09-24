@@ -39,6 +39,33 @@ Ext.onReady(function () {
       dataIndex: 'result',
       header: "执行结果",
       flex: 1
+    }],
+    listeners: {
+      itemdblclick: function (dv, record, item, index, e) {
+        formWindow.getFormPanel().getForm().loadRecord(record);
+        formWindow.show();
+      }
+    }
+  });
+
+  var formWindow = new MyExt.Component.FormWindow({
+    title: 'info',
+    width: 500,
+    height: 250,
+    formItems: [{
+      fieldLabel: 'uuid',
+      name: 'uuid',
+      // cls: 'x-item-disabled',
+      readOnly: true
+    }, {
+      fieldLabel: '执行时间',
+      name: 'executeTime',
+      readOnly: true
+    }, {
+      xtype: 'textarea',
+      fieldLabel: '执行结果',
+      name: 'result',
+      readOnly: true
     }]
   });
 
