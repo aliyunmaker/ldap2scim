@@ -23,66 +23,65 @@ import ldap2scim.utils.UUIDUtils;
 @Component
 public class Ldap2ScimTask implements CommandLineRunner {
 
-    private static Logger logger = LoggerFactory.getLogger(Ldap2ScimTask.class);
+	private static Logger logger = LoggerFactory.getLogger(Ldap2ScimTask.class);
 
-    public static List<TaskRecord> taskRecords = new ArrayList<>();
+	public static List<TaskRecord> taskRecords = new ArrayList<>();
 
-    @Override
-    public void run(String... args) throws Exception {
+	@Override
+	public void run(String... args) throws Exception {
 
-        try {
+		try {
 
-            if (!CommonConstants.SCIM_SYNC_CRON_ENABLED) {
-                logger.info("[task] scim sync task disabled");
-                return;
-            }
+			if (!CommonConstants.SCIM_SYNC_CRON_ENABLED) {
+				logger.info("[task] scim sync task disabled");
+				return;
+			}
 
-            if (StringUtils.isBlank(CommonConstants.SCIM_SYNC_CRON_EXPRESSION)) {
-                logger.info("[task] scim sync expression is blank!");
-                return;
-            }
+			if (StringUtils.isBlank(CommonConstants.SCIM_SYNC_CRON_EXPRESSION)) {
+				logger.info("[task] scim sync expression is blank!");
+				return;
+			}
 
-            CronExpression cronTrigger = CronExpression.parse(CommonConstants.SCIM_SYNC_CRON_EXPRESSION);
-            logger.info("[task] scim sync task enabled:{}", CommonConstants.SCIM_SYNC_CRON_EXPRESSION);
-            logger.info("[task] next execute time:{}",
-                cronTrigger.next(LocalDateTime.now()).format(CommonConstants.DateTimeformatter));
-            ConcurrentTaskScheduler executor = new ConcurrentTaskScheduler();
-            ScheduledFuture<?> future = executor.schedule(new Runnable() {
+			CronExpression cronTrigger = CronExpression.parse(CommonConstants.SCIM_SYNC_CRON_EXPRESSION);
+			logger.info("[task] scim sync task enabled:{}", CommonConstants.SCIM_SYNC_CRON_EXPRESSION);
+			logger.info("[task] next execute time:{}",
+					cronTrigger.next(LocalDateTime.now()).format(CommonConstants.DateTimeformatter));
+			ConcurrentTaskScheduler executor = new ConcurrentTaskScheduler();
+			ScheduledFuture<?> future = executor.schedule(new Runnable() {
 
-                @Override
-                public void run() {
-                    try {
-                        TaskRecord taskRecord = new TaskRecord();
-                        String uuid = UUIDUtils.generateUUID();
-                        taskRecord.setUuid(uuid);
-                        taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
-                        logger.info("[task][{}] scim sync start!", uuid);
-                        List<Map<String, String>> ldapList =
-                            LdapService.searchLdapUser(CommonConstants.LDAP_Searchbase,
-                                CommonConstants.LDAP_Searchfilter);
-                        String result = LdapService.syncLdaptoScim(ldapList);
-                        logger.info("[task][{}] scim sync end!", uuid);
-                        taskRecord.setResult(result);
-                        taskRecords.add(taskRecord);
-                        if (taskRecords.size() >= 200) {
-                            taskRecords.remove(0);
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-            }, new CronTrigger(CommonConstants.SCIM_SYNC_CRON_EXPRESSION));
-            // future.cancel(true);
-            logger.info("[task] future:{}", future.toString());
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
+				@Override
+				public void run() {
+					try {
+						TaskRecord taskRecord = new TaskRecord();
+						String uuid = UUIDUtils.generateUUID();
+						taskRecord.setUuid("cron_" + uuid);
+						taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
+						logger.info("[task][{}] scim sync start!", uuid);
+						List<Map<String, String>> ldapList = LdapService.searchLdapUser(CommonConstants.LDAP_Searchbase,
+								CommonConstants.LDAP_Searchfilter);
+						String result = LdapService.syncLdaptoScim(ldapList);
+						logger.info("[task][{}] scim sync end!", uuid);
+						taskRecord.setResult(result);
+						taskRecords.add(taskRecord);
+						if (taskRecords.size() >= 200) {
+							taskRecords.remove(0);
+						}
+					} catch (Exception e) {
+						logger.error(e.getMessage(), e);
+					}
+				}
+			}, new CronTrigger(CommonConstants.SCIM_SYNC_CRON_EXPRESSION));
+			// future.cancel(true);
+			logger.info("[task] future:{}", future.toString());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 
-    }
+	}
 
-    public static void main(String[] args) {
-        CronExpression cronTrigger = CronExpression.parse("0 15 3 * * *");
-        System.out.println(cronTrigger.next(LocalDateTime.now()).format(CommonConstants.DateTimeformatter));
-    }
+	public static void main(String[] args) {
+		CronExpression cronTrigger = CronExpression.parse("0 15 3 * * *");
+		System.out.println(cronTrigger.next(LocalDateTime.now()).format(CommonConstants.DateTimeformatter));
+	}
 
 }
