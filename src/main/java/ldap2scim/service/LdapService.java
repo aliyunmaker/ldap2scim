@@ -190,7 +190,7 @@ public class LdapService {
         scimGroupDeleteCount.set(scimGroupServerMap.size());
 
         String result = String.format(
-            "[syncLdaptoScim][%s]:ldapTotal[%d],user[ldap:%d,scim:%d][add:%d,update:%d,delete:%d,nochange:%d],group[ldap:%d,scim:%d][add:%d,update:%d,delete:%d,nochange:%d]",
+            "[syncLdaptoScim][%s]:ldapTotal[%d],\nuser[ldap:%d,scim:%d][add:%d,update:%d,delete:%d,nochange:%d],\ngroup[ldap:%d,scim:%d][add:%d,update:%d,delete:%d,nochange:%d]",
             TaskTraceId.get(), list.size(), ldapUserCount, scimUserCount, scimUserAddCount.get(),
             scimUserUpdateCount.get(), scimUserDeleteCount.get(), scimUserNoChangeCount.get(), ldapGroupCount,
             scimGroupCount, scimGroupAddCount.get(),
