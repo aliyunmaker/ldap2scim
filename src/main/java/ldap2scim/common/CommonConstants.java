@@ -35,8 +35,6 @@ public class CommonConstants {
 
     public static final boolean SCIM_SYNC_CRON_ENABLED;
     public static final String SCIM_SYNC_CRON_EXPRESSION;
-    public static final boolean SCIM_SYNC_GROUP_ENABLED;
-    public static final boolean SCIM_SYNC_GROUP_MEMBER_ENABLED;
 
     public static final String CONFIG_FILE_NAME = File.separator + "ldap2scim.properties";
 
@@ -57,8 +55,6 @@ public class CommonConstants {
         SCIM_ATTR_USERNAME = properties.getProperty("scim_attr_username");
         SCIM_SYNC_CRON_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_cron_enabled"));
         SCIM_SYNC_CRON_EXPRESSION = properties.getProperty("scim_sync_cron_expression");
-        SCIM_SYNC_GROUP_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_group_enabled"));
-        SCIM_SYNC_GROUP_MEMBER_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_group_member_enabled"));
         logger.info("============================CONFIG=========================");
         logger.info("SCIM_URL:" + SCIM_URL);
         logger.info("SCIM_KEY:" + SCIM_KEY);
@@ -78,8 +74,6 @@ public class CommonConstants {
         logger.info("-----------------------------------------------------------");
         logger.info("SCIM_SYNC_CRON_ENABLED:" + SCIM_SYNC_CRON_ENABLED);
         logger.info("SCIM_SYNC_CRON_EXPRESSION:" + SCIM_SYNC_CRON_EXPRESSION);
-        logger.info("SCIM_SYNC_GROUP_ENABLED:" + SCIM_SYNC_GROUP_ENABLED);
-        logger.info("SCIM_SYNC_GROUP_MEMBER_ENABLED:" + SCIM_SYNC_GROUP_MEMBER_ENABLED);
         logger.info("============================================================");
     }
 
