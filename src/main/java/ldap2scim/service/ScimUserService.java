@@ -34,7 +34,7 @@ public class ScimUserService {
 
     public static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
 
-    public static void main1(String[] args) throws Exception {
+    public static void main2(String[] args) throws Exception {
         ScimUser scimUser = new ScimUser();
         scimUser.setGivenName("二");
         scimUser.setFamilyName("程");
@@ -44,8 +44,8 @@ public class ScimUserService {
         addUser(scimUser);
     }
 
-    public static void main2(String[] args) throws Exception {
-        for (int i = 15; i <= 30; i++) {
+    public static void main(String[] args) throws Exception {
+        for (int i = 0; i <= 600; i++) {
             String suffix = StringUtils.leftPad("" + i, 4, '0');
             ScimUser scimUser = new ScimUser();
             scimUser.setGivenName("givenName" + suffix);
@@ -53,7 +53,8 @@ public class ScimUserService {
             scimUser.setUserName("userName" + suffix);
             scimUser.setExternalId("externalId+" + suffix + "@chengchao.name");
             addUser(scimUser);
-            Thread.sleep(10);
+            // 用RateLimiter控制
+            // Thread.sleep(10);
             System.out.println("done:" + i);
         }
     }
@@ -79,11 +80,6 @@ public class ScimUserService {
         // logger.info("==================================");
         // logger.info(String.valueOf(list.size()));
         return convertToScimUserList(list);
-    }
-
-    public static void main(String[] args) throws Exception {
-        List<ScimUser> list = getAllScimUser();
-        System.out.println(list.size());
     }
 
     public static List<ScimUser> getAllScimUser() throws Exception {

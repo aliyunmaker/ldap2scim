@@ -261,8 +261,6 @@ public class LdapService {
         if (null != scimUserInServer) {
             scimUserServerMap.remove(scimUserInServer.getExternalId());
         }
-
-        // 暂时不做scim端的删除
         return userId;
     }
 
