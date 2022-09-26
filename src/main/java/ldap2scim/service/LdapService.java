@@ -110,10 +110,10 @@ public class LdapService {
         TaskTraceId.set("task_" + System.currentTimeMillis());
         List<ScimUser> scimUserServerList = ScimUserService.getAllScimUser();
         List<ScimGroup> scimGroupServerList = ScimGroupService.getAllScimGroup();
-        Map<String, ScimUser> scimUserServerMap =
-            scimUserServerList.stream().collect(Collectors.toMap(x -> x.getExternalId(), x -> x));
-        Map<String, ScimGroup> scimGroupServerMap =
-            scimGroupServerList.stream().collect(Collectors.toMap(x -> x.getExternalId(), x -> x));
+        Map<String, ScimUser> scimUserServerMap = scimUserServerList.stream()
+            .collect(Collectors.toMap(x -> x.getExternalId(), x -> x));
+        Map<String, ScimGroup> scimGroupServerMap = scimGroupServerList.stream()
+            .collect(Collectors.toMap(x -> x.getExternalId(), x -> x));
         int scimUserCount = scimUserServerList.size();
         int scimGroupCount = scimGroupServerList.size();
         int ldapUserCount = 0;
@@ -193,10 +193,11 @@ public class LdapService {
             "[syncLdaptoScim][%s]:ldapTotal[%d],\nuser[ldap:%d,scim:%d][add:%d,update:%d,delete:%d,nochange:%d],\ngroup[ldap:%d,scim:%d][add:%d,update:%d,delete:%d,nochange:%d]",
             TaskTraceId.get(), list.size(), ldapUserCount, scimUserCount, scimUserAddCount.get(),
             scimUserUpdateCount.get(), scimUserDeleteCount.get(), scimUserNoChangeCount.get(), ldapGroupCount,
-            scimGroupCount, scimGroupAddCount.get(),
-            scimGroupUpdateCount.get(), scimGroupDeleteCount.get(), scimGroupNoChangeCount.get());
+            scimGroupCount, scimGroupAddCount.get(), scimGroupUpdateCount.get(), scimGroupDeleteCount.get(),
+            scimGroupNoChangeCount.get());
 
-        // String result = "[" + TaskTraceId.get() + "][syncLdaptoScim] total[" + list.size()
+        // String result = "[" + TaskTraceId.get() + "][syncLdaptoScim] total[" +
+        // list.size()
         // + "],user[][add:,update:,delete:],group[][add:,update:,delete:]";
 
         logger.info(result);
@@ -235,10 +236,6 @@ public class LdapService {
         Assert.notNull(scimUser, "scimUser can not be null!");
         Assert.hasText(scimUser.getUserName(), "scimUser's userName can not be blank!");
         ScimUser scimUserInServer = scimUserServerMap.get(scimUser.getExternalId());
-        // List<ScimUser> list = ScimUserService.searchScimUser("userName eq \"" + scimUser.getUserName() + "\"", null);
-        // if (list.size() > 1) {
-        // throw new RuntimeException("find more than 1 user by userName:" + scimUser.getUserName());
-        // }
         String userId = null;
         // add
         if (null == scimUserInServer) {
@@ -255,6 +252,8 @@ public class LdapService {
             logger.info("[{}][user-update][{}]:{}", TaskTraceId.get(), scimUser.getUserName(),
                 JsonUtils.toJsonString(scimUser));
         } else {
+            // logger.info("[{}][user-nochange][{}]:{}", TaskTraceId.get(), scimUser.getUserName(),
+            // JsonUtils.toJsonString(scimUser));
             scimUserNoChangeCount.incrementAndGet();
         }
 
@@ -277,11 +276,6 @@ public class LdapService {
         throws Exception {
         Assert.notNull(scimGroup, "scimGroup can not be null!");
         Assert.hasText(scimGroup.getDisplayName(), "scimGroup's displayName can not be blank!");
-        // List<ScimGroup> list =
-        // ScimGroupService.searchScimGroup("displayName eq \"" + scimGroup.getDisplayName() + "\"", null);
-        // if (list.size() > 1) {
-        // throw new RuntimeException("find more than 1 group by displayName:" + scimGroup.getDisplayName());
-        // }
         ScimGroup scimGroupInServer = scimGroupServerMap.get(scimGroup.getExternalId());
         String groupId = null;
         // add
@@ -302,6 +296,8 @@ public class LdapService {
             // remove all member from group, 由于scim没有返回group的member列表,所以暂时只能先删除,再重建
             ScimGroupService.removeAllMembersByGroupId(groupId);
         } else {
+            // logger.info("[{}][group-nochange][{}]:{}", TaskTraceId.get(), scimGroup.getDisplayName(),
+            // JsonUtils.toJsonString(scimGroup));
             scimGroupNoChangeCount.incrementAndGet();
         }
 
@@ -310,6 +306,6 @@ public class LdapService {
             scimGroupServerMap.remove(scimGroupInServer.getExternalId());
         }
         return groupId;
-    }
 
+    }
 }
