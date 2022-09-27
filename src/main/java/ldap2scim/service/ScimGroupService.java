@@ -27,13 +27,6 @@ public class ScimGroupService {
         AuthHeader.put("Authorization", "Bearer " + CommonConstants.SCIM_KEY);
     }
 
-    public static void main(String[] args) throws Exception {
-        ScimGroup group = new ScimGroup();
-        group.setDisplayName("groupTest");
-        group.setExternalId("groupID-111");
-        System.out.println(addGroup(group));
-    }
-
     public static List<ScimGroup> searchScimGroup(String filter, Page page) throws Exception {
         ScimUserService.RATE_LIMITER.acquire(1);
         Map<String, String> params = new HashMap<>();

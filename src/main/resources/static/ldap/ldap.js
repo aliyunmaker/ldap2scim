@@ -98,6 +98,7 @@ Ext.onReady(function () {
           }, function (data) {
             reload();
             MyExt.Msg.alert('同步成功!');
+
           });
         });
       }
@@ -111,7 +112,7 @@ Ext.onReady(function () {
             ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
           }, function (data) {
             reload();
-            MyExt.Msg.alert('同步成功!');
+            MyExt.Msg.alert(data.data);
           });
         });
       }

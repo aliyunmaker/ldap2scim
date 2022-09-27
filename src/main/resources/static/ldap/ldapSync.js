@@ -65,6 +65,7 @@ Ext.onReady(function () {
       xtype: 'textarea',
       fieldLabel: '执行结果',
       name: 'result',
+      height: 100,
       readOnly: true
     }]
   });
