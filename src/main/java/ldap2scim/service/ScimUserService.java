@@ -34,31 +34,6 @@ public class ScimUserService {
 
     public static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
 
-    public static void main2(String[] args) throws Exception {
-        ScimUser scimUser = new ScimUser();
-        scimUser.setGivenName("二");
-        scimUser.setFamilyName("程");
-        scimUser.setUserName("cheng333");
-        scimUser.setEmail("cheng333@landingzone.cc");
-        scimUser.setExternalId("33CN=程二,OU=hangzhou,DC=landingzone,DC=cc");
-        addUser(scimUser);
-    }
-
-    public static void main(String[] args) throws Exception {
-        for (int i = 0; i <= 600; i++) {
-            String suffix = StringUtils.leftPad("" + i, 4, '0');
-            ScimUser scimUser = new ScimUser();
-            scimUser.setGivenName("givenName" + suffix);
-            scimUser.setFamilyName("familyName" + suffix);
-            scimUser.setUserName("userName" + suffix);
-            scimUser.setExternalId("externalId+" + suffix + "@chengchao.name");
-            addUser(scimUser);
-            // 用RateLimiter控制
-            // Thread.sleep(10);
-            System.out.println("done:" + i);
-        }
-    }
-
     public static List<ScimUser> searchScimUser(String filter, Page page) throws Exception {
         RATE_LIMITER.acquire(1);
         Map<String, String> params = new HashMap<>();
