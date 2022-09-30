@@ -18,8 +18,15 @@ import ldap2scim.common.CommonConstants;
 public class LdapTest {
 
     public static void main(String[] args) {
-//        testAuth();
-        testGetUserInfo();
+        // testAuth();
+        // testGetUserInfo();
+        generateLdapUserData();
+    }
+
+    public static void generateLdapUserData() {
+        for (int i = 0; i < 1000; i++) {
+            System.out.println("zhang" + i + ",san" + i + ",zhangsandisplay" + i + ",zhangsan" + i + ",Test_1234");
+        }
     }
 
     public static void testAuth() {
@@ -60,13 +67,13 @@ public class LdapTest {
             String searchFilter = "(objectClass=user)";
             // String searchFilter = "(objectClass=*)";
             // 设置搜索域节点
-//             String searchBase = "dc=landingzone,dc=cc";
-//            String searchBase = "ou=hangzhou,dc=landingzone,dc=cc";
+            // String searchBase = "dc=landingzone,dc=cc";
+            // String searchBase = "ou=hangzhou,dc=landingzone,dc=cc";
             String searchBase = "dc=test,dc=com";
             // 定制返回属性,不定制属性，返回所有的属性集
-            String[] returningAttrs = { "url", "whenChanged", "employeeID", "name", "userPrincipalName",
-                    "physicalDeliveryOfficeName", "departmentNumber", "telephoneNumber", "homePhone", "mobile",
-                    "department", "sAMAccountName", "whenChanged", "mail", "givenname", "sn", "uid" };
+            String[] returningAttrs = {"url", "whenChanged", "employeeID", "name", "userPrincipalName",
+                "physicalDeliveryOfficeName", "departmentNumber", "telephoneNumber", "homePhone", "mobile",
+                "department", "sAMAccountName", "whenChanged", "mail", "givenname", "sn", "uid"};
             searchCtls.setReturningAttributes(returningAttrs);
             try {
                 NamingEnumeration<SearchResult> searchResults = dc.search(searchBase, searchFilter, searchCtls);
@@ -80,7 +87,7 @@ public class LdapTest {
                     System.out.println("===================");
                     NamingEnumeration<?> attribute = attributes.getAll();
                     while (attribute.hasMore()) {
-                        Attribute attr = (Attribute) attribute.next();
+                        Attribute attr = (Attribute)attribute.next();
                         System.out.println(attr.getID() + "=" + attr.get());
                     }
                 }

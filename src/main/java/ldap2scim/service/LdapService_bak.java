@@ -12,13 +12,9 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
+import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-import javax.naming.ldap.Control;
-import javax.naming.ldap.InitialLdapContext;
-import javax.naming.ldap.LdapContext;
-import javax.naming.ldap.PagedResultsControl;
-import javax.naming.ldap.PagedResultsResponseControl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -37,9 +33,9 @@ import ldap2scim.utils.JsonUtils;
  * @date 2021-10-19
  */
 @Component
-public class LdapService {
+public class LdapService_bak {
 
-    private static Logger logger = LoggerFactory.getLogger(LdapService.class);
+    private static Logger logger = LoggerFactory.getLogger(LdapService_bak.class);
 
     private static ThreadLocal<String> TaskTraceId = new ThreadLocal<>();
 
@@ -68,8 +64,7 @@ public class LdapService {
         // javax.naming.PartialResultException
         // env.put(Context.REFERRAL, "follow");
         try {
-            LdapContext ctx = new InitialLdapContext(env, null);
-            // InitialDirContext dc = new InitialDirContext(env);// 初始化上下文
+            InitialDirContext dc = new InitialDirContext(env);// 初始化上下文
             // 创建搜索控件
             SearchControls searchCtls = new SearchControls();
             // 设置搜索范围
@@ -81,56 +76,30 @@ public class LdapService {
                 CommonConstants.SCIM_ATTR_DISPLAYNAME, CommonConstants.SCIM_ATTR_USERNAME, "member",
                 "distinguishedName", "objectClass"};
             searchCtls.setReturningAttributes(returningAttrs);
-            // Activate paged results
-            int pageSize = 500;
-            int pageNum = 0;
-            byte[] cookie = null;
-            ctx.setRequestControls(new Control[] {new PagedResultsControl(pageSize, Control.NONCRITICAL)});
-            do {
-                pageNum++;
-                NamingEnumeration<SearchResult> searchResults = ctx.search(searchBase, searchFilter, searchCtls);
-                while (searchResults != null && searchResults.hasMore()) {
-                    SearchResult searchResult = searchResults.next();
-                    Attributes attributes = searchResult.getAttributes();
-                    NamingEnumeration<?> attribute = attributes.getAll();
-                    Map<String, String> map = new HashMap<>();
-                    while (attribute.hasMoreElements()) {
-                        Attribute item = (Attribute)attribute.nextElement();
-                        if ("objectClass".equals(item.getID())) {
-                            map.put(item.getID(), item.get(item.size() - 1).toString());
-                        } else if ("member".equals(item.getID())) {
-                            // map.put(item.getID(), item.get(item.size() - 1).toString());
-                            StringBuilder memberStringBuilder = new StringBuilder();
-                            for (int i = 0; i < item.size(); i++) {
-                                memberStringBuilder.append(item.get(i).toString());
-                                memberStringBuilder.append("|");
-                            }
-                            map.put(item.getID(), memberStringBuilder.toString());
-                        } else {
-                            map.put(item.getID(), item.get().toString());
+            NamingEnumeration<SearchResult> searchResults = dc.search(searchBase, searchFilter, searchCtls);
+            while (searchResults.hasMore()) {
+                SearchResult searchResult = searchResults.next();
+                Attributes attributes = searchResult.getAttributes();
+                NamingEnumeration<?> attribute = attributes.getAll();
+                Map<String, String> map = new HashMap<>();
+                while (attribute.hasMoreElements()) {
+                    Attribute item = (Attribute)attribute.nextElement();
+                    if ("objectClass".equals(item.getID())) {
+                        map.put(item.getID(), item.get(item.size() - 1).toString());
+                    } else if ("member".equals(item.getID())) {
+                        // map.put(item.getID(), item.get(item.size() - 1).toString());
+                        StringBuilder memberStringBuilder = new StringBuilder();
+                        for (int i = 0; i < item.size(); i++) {
+                            memberStringBuilder.append(item.get(i).toString());
+                            memberStringBuilder.append("|");
                         }
+                        map.put(item.getID(), memberStringBuilder.toString());
+                    } else {
+                        map.put(item.getID(), item.get().toString());
                     }
-                    result.add(map);
                 }
-
-                // Examine the paged results control response
-                Control[] controls = ctx.getResponseControls();
-                if (controls != null) {
-                    for (int i = 0; i < controls.length; i++) {
-                        if (controls[i] instanceof PagedResultsResponseControl) {
-                            PagedResultsResponseControl prrc = (PagedResultsResponseControl)controls[i];
-                            logger.info("[LDAP] END-OF-PAGE[{}]", pageNum);
-                            cookie = prrc.getCookie();
-                        }
-                    }
-                } else {
-                    logger.error("No controls were sent from the server");
-                }
-
-                // Re-activate paged results
-                ctx.setRequestControls(new Control[] {new PagedResultsControl(pageSize, cookie, Control.CRITICAL)});
-            } while (cookie != null);
-            ctx.close();
+                result.add(map);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
