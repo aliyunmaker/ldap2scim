@@ -1,5 +1,5 @@
 # 简介
-这是一个能独立部署的(LDAP->SCIM)同步工具
+这是一个能独立部署的(LDAP->SCIM)同步工具  
 列如: 把本地的Microsoft Active Directory(AD) 中的用户信息同步到阿里云的CloudSSO
 
 ### 优势
