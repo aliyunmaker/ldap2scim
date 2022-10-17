@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
@@ -53,7 +54,7 @@ public class CommonConstants {
         SCIM_ATTR_EXTERNALID = properties.getProperty("scim_attr_externalid");
         SCIM_ATTR_DISPLAYNAME = properties.getProperty("scim_attr_displayname");
         SCIM_ATTR_USERNAME = properties.getProperty("scim_attr_username");
-        SCIM_SYNC_CRON_ENABLED = Boolean.valueOf(properties.getProperty("scim_sync_cron_enabled"));
+        SCIM_SYNC_CRON_ENABLED = Boolean.parseBoolean(properties.getProperty("scim_sync_cron_enabled"));
         SCIM_SYNC_CRON_EXPRESSION = properties.getProperty("scim_sync_cron_expression");
         logger.info("============================CONFIG=========================");
         logger.info("SCIM_URL:" + SCIM_URL);
@@ -77,30 +78,38 @@ public class CommonConstants {
         logger.info("============================================================");
     }
 
+    /**
+     * 如果configPath不为空,则优先使用该路径,若为空则继续查找 <br>
+     *
+     * @return null
+     */
     public static Properties loadProperties() {
         Properties properties = new Properties();
         try {
-            File file = null;
+            File file;
             String configPath = System.getProperty("configPath");
             if (StringUtils.isNotBlank(configPath)) {
                 file = new File(configPath);
-            }
-            if (StringUtils.isBlank(configPath) || !file.exists()) {
+                if (!file.exists()) {
+                    logger.info("[1]can not find config file[-D]:" + configPath);
+                    throw new RuntimeException("can not find config file!");
+                }
+            } else {
                 configPath = System.getProperty("user.dir") + CONFIG_FILE_NAME;
                 file = new File(configPath);
+                if (!file.exists()) {
+                    configPath = System.getProperty("user.home") + File.separator + "config" + CONFIG_FILE_NAME;
+                    file = new File(configPath);
+                }
+                if (!file.exists()) {
+                    logger.info("[2]can not find config file[user.dir]:" + configPath);
+                    logger.info("[3]can not find config file[user.home]:" + configPath);
+                    throw new RuntimeException("can not find config file!");
+                }
             }
-            if (!file.exists()) {
-                configPath = System.getProperty("user.home") + File.separator + "config" + CONFIG_FILE_NAME;
-                file = new File(configPath);
-            }
-            if (!file.exists()) {
-                logger.info("[1]can not find config file[-D]:" + configPath);
-                logger.info("[2]can not find config file[user.dir]:" + configPath);
-                logger.info("[3]can not find config file[user.home]:" + configPath);
-                throw new RuntimeException("can not find config file!");
-            }
+
             InputStream ins = new FileInputStream(file);
-            InputStreamReader reader = new InputStreamReader(ins, "UTF-8");
+            InputStreamReader reader = new InputStreamReader(ins, StandardCharsets.UTF_8);
             properties.load(reader);
             ins.close();
             reader.close();
