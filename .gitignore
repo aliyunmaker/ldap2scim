@@ -13,7 +13,7 @@ config/
 !**/src/test/**/config/
 
 .DS_Store
-
+.fleet
 ### cert ###
 *.crt
 *.pem
