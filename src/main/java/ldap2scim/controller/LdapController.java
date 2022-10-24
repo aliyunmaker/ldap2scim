@@ -68,12 +68,12 @@ public class LdapController extends BaseController {
         try {
             String ldapbase = request.getParameter("ldapbase");
             String ldapfilter = request.getParameter("ldapfilter");
+            final List<Map<String, String>> ldapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
             new Thread(new Runnable() {
 
                 @Override
                 public void run() {
                     try {
-                        List<Map<String, String>> ldapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
                         TaskRecord taskRecord = new TaskRecord();
                         String uuid = UUIDUtils.generateUUID();
                         taskRecord.setUuid("syncSearch_" + uuid);
@@ -86,7 +86,7 @@ public class LdapController extends BaseController {
                     }
                 }
             }, "syncSearch" + System.currentTimeMillis()).start();
-            result.setData("后台同步中,请查看后台日志!");
+            result.setData("数量:[" + ldapList.size() + "],后台同步中,请查看同步任务日志!");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -104,21 +104,40 @@ public class LdapController extends BaseController {
             String ldapfilter = request.getParameter("ldapfilter");
             String distinguishedNameArray = request.getParameter("distinguishedNameArray");
             List<String> distinguishedNameList = JsonUtils.parseArray(distinguishedNameArray, String.class);
-            List<Map<String, String>> ldapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
+            List<Map<String, String>> allLdapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
 
-            List<Map<String, String>> targetList = new ArrayList<>();
-            for (Map<String, String> map : ldapList) {
+            List<Map<String, String>> ldapList = new ArrayList<>();
+            for (Map<String, String> map : allLdapList) {
                 if (distinguishedNameList.contains(map.get("distinguishedName"))) {
-                    targetList.add(map);
+                    ldapList.add(map);
                 }
             }
-            LdapService.syncLdaptoScim(targetList);
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        TaskRecord taskRecord = new TaskRecord();
+                        String uuid = UUIDUtils.generateUUID();
+                        taskRecord.setUuid("syncChoose_" + uuid);
+                        taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
+                        String taskResult = LdapService.syncLdaptoScim(ldapList);
+                        taskRecord.setResult(taskResult);
+                        Ldap2ScimTask.taskRecords.add(taskRecord);
+                    } catch (Exception e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+            }, "syncChoose" + System.currentTimeMillis()).start();
+            result.setData("数量:[" + ldapList.size() + "],后台同步中,请查看同步任务日志!");
+
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             result.setSuccess(false);
             result.setErrorMsg(e.getMessage());
         }
         outputToJSON(response, result);
+
     }
 
     @RequestMapping("/getSearchParams.do")

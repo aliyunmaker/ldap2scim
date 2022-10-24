@@ -90,14 +90,14 @@ Ext.onReady(function () {
         for (let i = 0; i < select.length; i++) {
           distinguishedNameArray[i] = select[i].data["distinguishedName"];
         }
-        MyExt.util.MessageConfirm('是否确定同步', function () {
+        MyExt.util.MessageConfirm('同步会覆盖SCIM服务端数据,是否确定同步', function () {
           MyExt.util.Ajax('../ldap/syncChoose.do', {
             distinguishedNameArray: Ext.JSON.encode(distinguishedNameArray),
             ldapbase: searchForm.getForm().getValues()["ldapbase"],
             ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
           }, function (data) {
             reload();
-            MyExt.Msg.alert('同步成功!');
+            MyExt.Msg.alert(data.data);
 
           });
         });
@@ -106,7 +106,7 @@ Ext.onReady(function () {
       text: '查询并同步到SCIM',
       iconCls: 'MyExt-refresh',
       handler: function () {
-        MyExt.util.MessageConfirm('是否确定同步所有查询结果', function () {
+        MyExt.util.MessageConfirm('同步会覆盖SCIM服务端数据,是否确定同步', function () {
           MyExt.util.Ajax('../ldap/syncSearch.do', {
             ldapbase: searchForm.getForm().getValues()["ldapbase"],
             ldapfilter: searchForm.getForm().getValues()["ldapfilter"]
