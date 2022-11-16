@@ -8,7 +8,7 @@ Ext.onReady(function () {
   var userStore = Ext.create('MyExt.Component.SimpleJsonStore', {
     dataUrl: '../scimUser/searchScimUser.do',
     rootFlag: 'data',
-    pageSize: 200,
+    pageSize: 100,
     fields: ['id', 'externalId', 'userName', 'displayName', 'givenName', 'familyName', 'email']
   });
 

@@ -30,6 +30,15 @@ public class ScimUserService {
         AuthHeader.put("Authorization", "Bearer " + CommonConstants.SCIM_KEY);
     }
 
+    public static void main(String[] args) throws Exception {
+        int numPerPage = 2;
+        int pageNum = 1;
+        int start = 0;
+        Page page = new Page(start, numPerPage, pageNum);
+        List<ScimUser> list = searchScimUser(null, page);
+        System.out.println(list.size());
+    }
+
     // private static Logger logger = LoggerFactory.getLogger(ScimUserService.class);
 
     public static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
@@ -38,8 +47,8 @@ public class ScimUserService {
         RATE_LIMITER.acquire(1);
         Map<String, String> params = new HashMap<>();
         if (null != page) {
-            // FIXME 服务端有bug待修复,startIndex先当做page使用
-            params.put("startIndex", String.valueOf(page.getPage()));
+            // 服务端的bug已经修复,startIndex含义恢复正常,startIndex是从1开始的
+            params.put("startIndex", String.valueOf(page.getStart() + 1));
             params.put("count", String.valueOf(page.getLimit()));
         }
         if (StringUtils.isNotBlank(filter)) {
