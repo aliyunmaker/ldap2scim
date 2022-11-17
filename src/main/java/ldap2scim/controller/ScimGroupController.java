@@ -30,6 +30,9 @@ public class ScimGroupController extends BaseController {
             Integer start = Integer.valueOf(request.getParameter("start"));
             Integer limit = Integer.valueOf(request.getParameter("limit"));
             Integer pageNum = Integer.valueOf(request.getParameter("page"));
+            if (limit > 100) {
+                throw new RuntimeException("limit can not be greater than 100!");
+            }
             Page page = new Page(start, limit, pageNum);
             List<ScimGroup> list = ScimGroupService.searchScimGroup(simpleSearch, page);
             result.setTotal(page.getTotal());

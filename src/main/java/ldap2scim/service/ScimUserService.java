@@ -30,15 +30,6 @@ public class ScimUserService {
         AuthHeader.put("Authorization", "Bearer " + CommonConstants.SCIM_KEY);
     }
 
-    public static void main(String[] args) throws Exception {
-        int numPerPage = 2;
-        int pageNum = 1;
-        int start = 0;
-        Page page = new Page(start, numPerPage, pageNum);
-        List<ScimUser> list = searchScimUser(null, page);
-        System.out.println(list.size());
-    }
-
     // private static Logger logger = LoggerFactory.getLogger(ScimUserService.class);
 
     public static final RateLimiter RATE_LIMITER = RateLimiter.create(5);
