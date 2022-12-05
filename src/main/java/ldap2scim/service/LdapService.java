@@ -32,7 +32,7 @@ import ldap2scim.model.ScimUser;
 import ldap2scim.utils.JsonUtils;
 
 /**
- * 
+ *
  * @author charles
  * @date 2021-10-19
  */
@@ -44,7 +44,7 @@ public class LdapService {
     private static ThreadLocal<String> TaskTraceId = new ThreadLocal<>();
 
     /**
-     * 
+     *
      * @param searchBase
      * @param searchFilter
      * @return
@@ -137,7 +137,7 @@ public class LdapService {
         return result;
     }
 
-    public static String syncLdaptoScim(List<Map<String, String>> list) throws Exception {
+    public static String syncLdaptoScim(List<Map<String, String>> list, Boolean removeUnselected) throws Exception {
         TaskTraceId.set("task_" + System.currentTimeMillis());
         List<ScimUser> scimUserServerList = ScimUserService.getAllScimUser();
         List<ScimGroup> scimGroupServerList = ScimGroupService.getAllScimGroup();
@@ -207,20 +207,23 @@ public class LdapService {
         }
 
         // 删除Ldap中已经删除的用户和组
-        for (ScimUser scimUserServer : scimUserServerMap.values()) {
-            ScimUserService.deleteUser(scimUserServer.getId());
-            logger.info("[{}][user-delete][{}]:{}", TaskTraceId.get(), scimUserServer.getId(),
-                JsonUtils.toJsonString(scimUserServer));
-        }
+        if (removeUnselected) {
+            logger.info("[{}]remove users and groups not exist in ldap", TaskTraceId.get());
+            for (ScimUser scimUserServer : scimUserServerMap.values()) {
+                ScimUserService.deleteUser(scimUserServer.getId());
+                logger.info("[{}][user-delete][{}]:{}", TaskTraceId.get(), scimUserServer.getId(),
+                    JsonUtils.toJsonString(scimUserServer));
+            }
 
-        for (ScimGroup scimGroupServer : scimGroupServerMap.values()) {
-            ScimGroupService.deleteGroup(scimGroupServer.getId());
-            logger.info("[{}][group-delete][{}]:{}", TaskTraceId.get(), scimGroupServer.getId(),
-                JsonUtils.toJsonString(scimGroupServer));
-        }
+            for (ScimGroup scimGroupServer : scimGroupServerMap.values()) {
+                ScimGroupService.deleteGroup(scimGroupServer.getId());
+                logger.info("[{}][group-delete][{}]:{}", TaskTraceId.get(), scimGroupServer.getId(),
+                    JsonUtils.toJsonString(scimGroupServer));
+            }
 
-        scimUserDeleteCount.set(scimUserServerMap.size());
-        scimGroupDeleteCount.set(scimGroupServerMap.size());
+            scimUserDeleteCount.set(scimUserServerMap.size());
+            scimGroupDeleteCount.set(scimGroupServerMap.size());
+        }
 
         String result = String.format(
             "[syncLdaptoScim][%s]:\nldapTotal[%d],scimError[%d],\nuser[ldap:%d,scim:%d]\n[add:%d,update:%d,delete:%d,nochange:%d],\ngroup[ldap:%d,scim:%d]\n[add:%d,update:%d,delete:%d,nochange:%d]",
@@ -259,7 +262,7 @@ public class LdapService {
 
     /**
      * 使用 userName当做查询主键
-     * 
+     *
      * @param scimUser
      * @throws Exception
      */
@@ -299,7 +302,7 @@ public class LdapService {
 
     /**
      * 使用 displayName当做查询主键
-     * 
+     *
      * @param scimGroup
      */
     public static String syncLdapGrouptoScim(ScimGroup scimGroup, Map<String, ScimGroup> scimGroupServerMap,
