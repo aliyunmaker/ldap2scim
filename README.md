@@ -29,13 +29,16 @@ ldap_searchfilter = (objectClass=user)
 scim_attr_givenname = givenName
 scim_attr_familyname = sn
 scim_attr_email = userPrincipalName
+# 该字段用于唯一标识一个用户，一旦设定，不建议修改
 scim_attr_externalid = distinguishedName
 scim_attr_displayname = sAMAccountName
 scim_attr_username = sAMAccountName
 
 # 是否开启定时同步
 scim_sync_cron_enabled = false
-scim_sync_cron_expression = 0 0 6 * * ? 
+scim_sync_cron_expression = 0 0 6 * * ?\
+# 同步的时候是否删除LDAP中不存在的用户（仅保留LDAP搜索条件查出来的用户） 
+scim_sync_cron_remove_not_exist = false
 ```
 
 cron表达式示例: https://help.aliyun.com/document_detail/64769.html

@@ -59,7 +59,7 @@ public class Ldap2ScimTask implements CommandLineRunner {
 						logger.info("[task][{}] scim sync start!", uuid);
 						List<Map<String, String>> ldapList = LdapService.searchLdapUser(CommonConstants.LDAP_Searchbase,
 								CommonConstants.LDAP_Searchfilter);
-						String result = LdapService.syncLdaptoScim(ldapList);
+						String result = LdapService.syncLdaptoScim(ldapList, CommonConstants.SCIM_SYNC_CRON_REMOVE_NOT_EXIST);
 						logger.info("[task][{}] scim sync end!", uuid);
 						taskRecord.setResult(result);
 						taskRecords.add(taskRecord);

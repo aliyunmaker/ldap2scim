@@ -6,6 +6,7 @@ target/
 dreamweb.iml
 dreamweb.properties
 ldap2cloudsso.properties
+ldap2scim.properties
 application-*.properties
 
 config/

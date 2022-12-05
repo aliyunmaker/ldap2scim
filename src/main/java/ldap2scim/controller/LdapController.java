@@ -26,7 +26,7 @@ import ldap2scim.utils.UUIDUtils;
 
 /**
  * ldap
- * 
+ *
  * @author charles
  * @date 2021-10-19
  */
@@ -68,6 +68,7 @@ public class LdapController extends BaseController {
         try {
             String ldapbase = request.getParameter("ldapbase");
             String ldapfilter = request.getParameter("ldapfilter");
+            Boolean removeUnselected = Boolean.valueOf(request.getParameter("removeUnselected"));
             final List<Map<String, String>> ldapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
             new Thread(new Runnable() {
 
@@ -78,7 +79,7 @@ public class LdapController extends BaseController {
                         String uuid = UUIDUtils.generateUUID();
                         taskRecord.setUuid("syncSearch_" + uuid);
                         taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
-                        String taskResult = LdapService.syncLdaptoScim(ldapList);
+                        String taskResult = LdapService.syncLdaptoScim(ldapList, removeUnselected);
                         taskRecord.setResult(taskResult);
                         Ldap2ScimTask.taskRecords.add(taskRecord);
                     } catch (Exception e) {
@@ -103,6 +104,7 @@ public class LdapController extends BaseController {
             String ldapbase = request.getParameter("ldapbase");
             String ldapfilter = request.getParameter("ldapfilter");
             String distinguishedNameArray = request.getParameter("distinguishedNameArray");
+            Boolean removeUnselected = Boolean.valueOf(request.getParameter("removeUnselected"));
             List<String> distinguishedNameList = JsonUtils.parseArray(distinguishedNameArray, String.class);
             List<Map<String, String>> allLdapList = LdapService.searchLdapUser(ldapbase, ldapfilter);
 
@@ -121,7 +123,7 @@ public class LdapController extends BaseController {
                         String uuid = UUIDUtils.generateUUID();
                         taskRecord.setUuid("syncChoose_" + uuid);
                         taskRecord.setExecuteTime(LocalDateTime.now().format(CommonConstants.DateTimeformatter));
-                        String taskResult = LdapService.syncLdaptoScim(ldapList);
+                        String taskResult = LdapService.syncLdaptoScim(ldapList, removeUnselected);
                         taskRecord.setResult(taskResult);
                         Ldap2ScimTask.taskRecords.add(taskRecord);
                     } catch (Exception e) {
