@@ -30,7 +30,7 @@ ldap_username = username
 ldap_password = password
 
 # LDAP 搜索条件，后续配置定时任务后，该搜索条件下的用户才会被同步到 SCIM 服务端
-ldap_searchbase = ou=hangzhou，dc=landingzone，dc=cc
+ldap_searchbase = ou=hangzhou,dc=landingzone,dc=cc
 ldap_searchfilter = (objectClass=user)
 
 # LDAP 和 SCIM 字段的对应关系
