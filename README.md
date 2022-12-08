@@ -54,8 +54,8 @@ scim_sync_cron_remove_not_exist = false
 * `scim_key` 和 `scim_url`：对于 CloudSSO 用户，可以参考该文档生成[同步密钥](https://help.aliyun.com/document_detail/264937.html)。生成成功后，可以参考该截图获取对应 URL：
   ![screenshot1](image/cloudsso_key.png)
 * `scim_attr_externalid`：️⚠️ 该字段用于唯一标识一个用户，通过该 ID 将 LDAP 用户和 SCIM 服务端用户进行关联。一旦设定，不要修改，否则会造成两端用户不匹配，进而可能导致 SCIM 服务端中不匹配用户被删除。
-* `scim_sync_cron_remove_not_exist`：⚠️ ️同步的时候是否删除LDAP中不存在的用户，开启该选项后，仅会保留 LDAP 搜索条件（`ldap_searchbase` 和 `ldap_searchfilter`）查出来的用户，也就是说，开启该选项后，如果之前手工将某个 LDAP 用户账号同步到 SCIM 端，但该用户账号不在 LDAP 搜索条件中，那么下次定时任务触发时，该用户账号会在 SCIM 端被删除。
-* `scim_sync_cron_expression`：cron表达式示例可以参考该[文档](https://help.aliyun.com/document_detail/64769.html)。 
+* `scim_sync_cron_remove_not_exist`：⚠️ ️同步的时候是否删除 LDAP 中不存在的用户，开启该选项后，仅会保留 LDAP 搜索条件（`ldap_searchbase` 和 `ldap_searchfilter`）查出来的用户，也就是说，开启该选项后，如果之前手工将某个 LDAP 用户账号同步到 SCIM 端，但该用户账号不在 LDAP 搜索条件中，那么下次定时任务触发时，该用户账号会在 SCIM 端被删除。
+* `scim_sync_cron_expression`：cron 表达式示例可以参考该[文档](https://help.aliyun.com/document_detail/64769.html)。 
 
 ## 配置文件读取顺序
 
