@@ -1,9 +1,6 @@
 package ldap2scim.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -73,7 +70,7 @@ public class ScimGroupService {
     public static String addGroup(ScimGroup scimGroup) throws Exception {
         ScimUserService.RATE_LIMITER.acquire(1);
         Assert.notNull(scimGroup, "scimGroup can not be null!");
-        scimGroup.setSchemas(List.of("urn:ietf:params:scim:schemas:core:2.0:Group"));
+        scimGroup.setSchemas(Collections.singletonList("urn:ietf:params:scim:schemas:core:2.0:Group"));
         String result = OkHttpClientUtils.post(ScimGroupsURL, AuthHeader, JsonUtils.toJsonStringDefault(scimGroup));
         ScimGroup addedScimGroup = JsonUtils.parseObject(result, ScimGroup.class);
         return addedScimGroup.getId();
@@ -85,7 +82,7 @@ public class ScimGroupService {
         Assert.hasText(scimGroup.getId(), "id can not be blank!");
         String id = scimGroup.getId();
         // user.setId(null);
-        scimGroup.setSchemas(List.of("urn:ietf:params:scim:schemas:core:2.0:Group"));
+        scimGroup.setSchemas(Collections.singletonList("urn:ietf:params:scim:schemas:core:2.0:Group"));
         OkHttpClientUtils.put(ScimGroupsURL + "/" + id, AuthHeader, JsonUtils.toJsonStringDefault(scimGroup));
 
     }
