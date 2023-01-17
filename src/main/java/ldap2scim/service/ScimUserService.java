@@ -155,7 +155,7 @@ public class ScimUserService {
         email.setType("work");
         email.setValue(scimUser.getEmail());
         user.setEmails(Collections.singletonList(email));
-        user.setSchemas(List.of("urn:ietf:params:scim:schemas:core:2.0:User"));
+        user.setSchemas(Collections.singletonList("urn:ietf:params:scim:schemas:core:2.0:User"));
         return user;
     }
 

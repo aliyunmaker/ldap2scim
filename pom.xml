@@ -14,7 +14,7 @@
 	<description>sync users from ldap to scim</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 		<maven.build.timestamp.format>yyyy-MM-dd_HHmm</maven.build.timestamp.format>
 	</properties>
 
@@ -41,7 +41,7 @@
 		</dependency>
 
 		<!-- httpclient 4.5 -->
-		<!-- 
+		<!--
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -66,15 +66,15 @@
 			<version>4.10.0</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
-		<!-- 	
+		<!--
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.9.1</version>
 		</dependency>
 		-->
-		
-		
+
+
 		<!-- do not use it in online env -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
